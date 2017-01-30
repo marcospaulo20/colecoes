@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<h:head>
+		<title>
+			<ui:insert name="titulo">Sistema Coleções</ui:insert>
+		</title>
+	</h:head>
+	
+	<h:body>
+		<div>
+			<h:form>
+				<p:menubar>
+					<p:menuitem label="Home" icon="ui-icon-home" url="/" />
+					
+					<p:submenu label="Livros">
+						<p:submenu label="Cadastro">
+							<p:menuitem value="Editora" action="/sistema/livro/editoras?faces-redirect=true" />
+						</p:submenu>
+						<p:submenu label="Consultas">
+						
+						</p:submenu>
+					</p:submenu>
+				</p:menubar>
+			</h:form>
+		</div>
+	
+		<div id="conteudo">
+			<ui:insert name="corpo" />
+		</div>
+		
+		<footer>
+			Sistema Coleções - @Marcos Paulo
+		</footer>
+	</h:body>
+</html>
