@@ -25,29 +25,27 @@ public class EditorasDAO implements Editoras, Serializable {
 	
 	@Override
 	public List<Editora> todas() {
-		TypedQuery<Editora> query = this.manager.createQuery("SELECT e FROM Editora e", Editora.class);
+		TypedQuery<Editora> query = this.manager.createQuery("SELECT e FROM Editora e ORDER BY e.nome", Editora.class);
 		return query.getResultList();
 	}
 
 	@Override
-	public Editora comDadosIguais(Editora editora) {
-		return null;
-	}
-
-	@Override
 	public Editora porId(Long id) {
-		return null;
+		return this.manager.find(Editora.class, id);
 	}
 
 	@Override
 	@Transactional
 	public Editora salvar(Editora editora) throws RegraNegocioException {
-		return null;
+		return this.manager.merge(editora);
 	}
 
 	@Override
+	@Transactional
 	public void remover(Editora editora) {
-
+		editora = this.porId(editora.getId());
+		
+		this.manager.remove(editora);
 	}
 
 }

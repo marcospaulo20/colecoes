@@ -1,22 +1,72 @@
 <!DOCTYPE html>
-<ui:composition template="/WEB-INF/template/layout.xhtml"
+<ui:composition template="../../WEB-INF/template/layout.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 
-	<ui:define name="titulo">Consulta de editoras</ui:define>
+	<ui:define name="titulo">Editoras</ui:define>
 
 	<ui:define name="corpo">
-		<h1>Consulta de editoras</h1>
-		
-		<h:form>
-			<p:dataTable value="#{editoraBean.todasEditoras}" var="editora">
-				<p:column headerText="Nome">
-					<h:outputLabel value="#{editora.nome}" />
-				</p:column>
-			</p:dataTable>	
+		<h:form id="formEditora">
+			<p:panel id="panelEditora" header="" style="margin-bottom:20px">
+				
+				<f:facet name="actions">
+					<p:commandButton value="Adicionar" icon="ui-icon-plus" oncomplete="PF('dlgCadastro').show();"
+						style="float:right">
+						<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+					</p:commandButton>
+				</f:facet>
+				
+				<p:dataTable value="#{editoraBean.todasEditoras}" var="editora" widgetVar="tabelaEditora"
+					paginator="true" rows="5" paginatorPosition="bottom"
+					emptyMessage="Nenhuma editora foi encontrada.">
+					<f:facet name="header">
+				        Lista de Editoras
+				    </f:facet>
+					<p:column headerText="Nome" filterBy="#{editora.nome}" filterMatchMode="contains">
+						<h:outputLabel value="#{editora.nome}" />
+					</p:column>
+					<p:column headerText="Pais" sortBy="#{editora.paisOrigem}">
+						<h:outputLabel value="#{editora.paisOrigem}" />
+					</p:column>
+					<p:column headerText="Ações" style="width: 100px; text-align: center;">
+						<p:commandButton icon="ui-icon-pencil" oncomplete="PF('dlgCadastro').show();" update="formCadastro">
+							<f:setPropertyActionListener value="#{editora}" target="#{editoraBean.editora}" />
+							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
+						
+						<p:commandButton icon="ui-icon-trash" update="@form" process="@this" action="#{editoraBean.excluir()}">
+							<p:confirm header="Excluir" message="Confirma exclus&#227;o desta editora?" icon="ui-icon-alert" />
+							<f:setPropertyActionListener value="#{editora}" target="#{editoraBean.editoraSelecionada}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</p:panel>
 		</h:form>
+		
+		<p:dialog id="dlgCadastro" widgetVar="dlgCadastro" header="Editora - Cadastro"
+			modal="true" resizable="false" responsive="true">
+			<h:form id="formCadastro">
+				<h:panelGrid columns="2">
+					<p:outputLabel for="nome" value="Nome" />
+					<p:inputText id="nome" value="#{editoraBean.editora.nome}" size="20"
+						required="true" requiredMessage="O campo 'Nome' é obrigatorio." />
+					
+					<p:outputLabel for="paises" value="Paises:" />
+			        <p:selectOneMenu id="paises" value="#{editoraBean.editora.paisOrigem}"
+			        	filter="true" filterMatchMode="contains" autoWidth="false" style="width: 120px"
+			        	required="true" requiredMessage="O campo 'Nome' é obrigatorio.">
+			            <f:selectItem itemLabel="Selecione um País" itemValue="" />
+			            <f:selectItem itemLabel="Japão" itemValue="Japão" />
+			            <f:selectItem itemLabel="Brasil" itemValue="Brasil" />
+			            <f:selectItem itemLabel="Estados Unidos" itemValue="Estados Unidos" />
+			        </p:selectOneMenu>
+			        
+			        <p:commandButton value="Salvar" action="#{editoraBean.salvar()}" update=":formCadastro :formEditora" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
 	</ui:define>
 </ui:composition>

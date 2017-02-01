@@ -1,4 +1,4 @@
-package br.com.mp.livro.converter;
+package br.com.mp.converter;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -6,19 +6,19 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 
-import br.com.mp.livro.model.Editora;
-import br.com.mp.livro.repository.Editoras;
+import br.com.mp.model.Pessoa;
+import br.com.mp.repository.Pessoas;
 
-@FacesConverter(forClass = Editora.class)
-public class EditoraConverter implements Converter {
+@FacesConverter(forClass = Pessoa.class)
+public class PessoaConverter implements Converter {
 	@Inject // funciona graças ao OmniFaces
-	private Editoras editoras;
+	private Pessoas pessoas;
 
 	@Override
 	public Object getAsObject(FacesContext context, UIComponent component, String value) {
-		Editora retorno = null;
+		Pessoa retorno = null;
 		if (value != null) {
-			retorno = this.editoras.porId(new Long(value));
+			retorno = this.pessoas.porId(new Long(value));
 		}
 		return retorno;
 	}
@@ -26,8 +26,8 @@ public class EditoraConverter implements Converter {
 	@Override
 	public String getAsString(FacesContext context, UIComponent component, Object value) {
 		if (value != null) {
-			Editora editora = ((Editora) value);
-			return editora.getId() == null ? null : editora.getId().toString();
+			Pessoa pessoa = ((Pessoa) value);
+			return pessoa.getId() == null ? null : pessoa.getId().toString();
 		}
 		return null;
 	}

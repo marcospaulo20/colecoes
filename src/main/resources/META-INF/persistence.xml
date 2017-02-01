@@ -5,8 +5,10 @@
 	<persistence-unit name="ColecoesPU">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		
+		<class>br.com.mp.model.Usuario</class>
+		<class>br.com.mp.model.Pessoa</class>
+		
 		<class>br.com.mp.livro.model.Editora</class>
-		<class>br.com.mp.livro.model.Autor</class>
 		<class>br.com.mp.livro.manga.model.Manga</class>
 
 		<properties>

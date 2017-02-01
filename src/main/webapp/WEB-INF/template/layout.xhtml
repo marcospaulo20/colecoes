@@ -9,28 +9,49 @@
 		<title>
 			<ui:insert name="titulo">Sistema Coleções</ui:insert>
 		</title>
+		<h:outputStylesheet library="css" name="default.css" />
 	</h:head>
 	
 	<h:body>
+		
+		<p:growl id="mensagem" showSummary="true" autoUpdate="true" />
+	
 		<div>
 			<h:form>
 				<p:menubar>
 					<p:menuitem label="Home" icon="ui-icon-home" url="/" />
 					
 					<p:submenu label="Livros">
-						<p:submenu label="Cadastro">
+						<p:submenu label="Gerais">
 							<p:menuitem value="Editora" action="/sistema/livro/editoras?faces-redirect=true" />
 						</p:submenu>
-						<p:submenu label="Consultas">
+						<p:submenu label="Manga">
+							<p:menuitem value="Titulos" action="/sistema/livro/manga/mangas?faces-redirect=true" />
+						</p:submenu>
+						<p:submenu label="HQ">
 						
 						</p:submenu>
 					</p:submenu>
+					
+					<p:submenu label="Gerais">
+						<p:menuitem value="Usuário" action="/sistema/geral/usuarios?faces-redirect=true" />
+						<p:menuitem value="Pessoa" action="/sistema/geral/pessoas?faces-redirect=true" />
+					</p:submenu>
+					
+					<f:facet name="options">
+						<p:commandButton value="Logout" icon="ui-icon-extlink" action="#{usuarioLoginBean.logaut}" />
+					</f:facet>	
 				</p:menubar>
 			</h:form>
 		</div>
 	
 		<div id="conteudo">
 			<ui:insert name="corpo" />
+			
+			<p:confirmDialog header="Exluir" global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton  value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+	     		<p:commandButton value="N&#227;o" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+	   		</p:confirmDialog>
 		</div>
 		
 		<footer>

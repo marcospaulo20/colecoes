@@ -1,4 +1,4 @@
-package br.com.mp.livro.model;
+package br.com.mp.model;
 
 import java.io.Serializable;
 
@@ -10,21 +10,25 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tb_editora", schema="livro")
-public class Editora implements Serializable {
+@Table(name = "tb_usuario")
+public class Usuario implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@Column(length=20, nullable = false)
-	private String nome;
 
-	@Column(name="pais_origem", nullable = false)
-	private String paisOrigem;
-	
+	@Column(name = "login", length = 10)
+	private String login;
+
+	@Column(name = "senha", length = 8)
+	private String senha;
+
+	public Usuario() {
+
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -33,20 +37,20 @@ public class Editora implements Serializable {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getLogin() {
+		return login;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setLogin(String login) {
+		this.login = login;
 	}
-	
-	public String getPaisOrigem() {
-		return paisOrigem;
+
+	public String getSenha() {
+		return senha;
 	}
-	
-	public void setPaisOrigem(String paisOrigem) {
-		this.paisOrigem = paisOrigem;
+
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 
 	@Override
@@ -54,7 +58,6 @@ public class Editora implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		return result;
 	}
 
@@ -66,16 +69,11 @@ public class Editora implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Editora other = (Editora) obj;
+		Usuario other = (Usuario) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
-			return false;
-		if (nome == null) {
-			if (other.nome != null)
-				return false;
-		} else if (!nome.equals(other.nome))
 			return false;
 		return true;
 	}

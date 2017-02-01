@@ -8,9 +8,8 @@ import br.com.mp.util.RegraNegocioException;
 public interface Editoras {
 
 	List<Editora> todas();
-	Editora comDadosIguais(Editora editora);
 	Editora porId(Long id);
 	
 	Editora salvar(Editora editora) throws RegraNegocioException;
-	void remover(Editora editora);
+	void remover(Editora editora) throws RegraNegocioException;
 }

@@ -1,9 +1,7 @@
 package br.com.mp.livro.manga.model;
 
 import java.io.Serializable;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,16 +10,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import br.com.mp.livro.model.Autor;
 import br.com.mp.livro.model.Editora;
 import br.com.mp.livro.model.Tipo;
+import br.com.mp.model.Pessoa;
 
 @Entity
-@Table(name = "tb_manga")
+@Table(name = "tb_manga", schema = "livro")
 public class Manga implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -33,15 +30,20 @@ public class Manga implements Serializable {
 	@Column(name = "nome", nullable = false)
 	private String nome;
 
+	@Column(name = "ano_lancamento", nullable = false)
+	private int anoLancamento;
+
 	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
 	private Tipo tipo;
 
 	@OneToOne
 	@JoinColumn(name = "editora_id", nullable = false)
 	private Editora editora;
 
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
-	private Set<Autor> autores;
+	@OneToOne
+	@JoinColumn(name = "escritor_id", nullable = false)
+	private Pessoa escritor;
 
 	public Long getId() {
 		return id;
@@ -57,6 +59,14 @@ public class Manga implements Serializable {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+	
+	public int getAnoLancamento() {
+		return anoLancamento;
+	}
+	
+	public void setAnoLancamento(int anoLancamento) {
+		this.anoLancamento = anoLancamento;
 	}
 
 	public Tipo getTipo() {
@@ -75,12 +85,12 @@ public class Manga implements Serializable {
 		this.editora = editora;
 	}
 
-	public Set<Autor> getAutores() {
-		return autores;
+	public Pessoa getEscritor() {
+		return escritor;
 	}
 
-	public void setAutores(Set<Autor> autores) {
-		this.autores = autores;
+	public void setEscritor(Pessoa escritor) {
+		this.escritor = escritor;
 	}
 
 	@Override

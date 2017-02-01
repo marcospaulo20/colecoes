@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<ui:composition template="../../../WEB-INF/template/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="titulo">Mangas</ui:define>
+
+	<ui:define name="corpo">
+		<h:form id="formManga">
+			<p:panel id="panelPessoa" header="Manga" style="margin-bottom:20px">
+				
+				<f:facet name="actions">
+					<p:commandButton value="Adicionar" icon="ui-icon-plus" actionListener="#{mangaBean.prepararCadastro}"
+						oncomplete="PF('dlgCadastro').show();" update="formCadastro" style="float:right">
+						<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+					</p:commandButton>
+					
+					<p:selectOneButton value="#{mangaBean.tipoSelecionado}">
+			            <f:selectItems value="#{mangaBean.todosTipos}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+			            <p:ajax event="change" listener="#{mangaBean.mundarTipoManga}" update="tabelaManga" />
+			        </p:selectOneButton>					
+				</f:facet>
+				
+				<p:dataTable id="tabelaManga" value="#{mangaBean.todosMangas}" var="manga" widgetVar="tabelaManga"
+					paginator="true" rows="5" paginatorPosition="bottom"
+					emptyMessage="Nenhum titulo foi encontrado.">
+					<f:facet name="header">
+				        Lista de Titulos
+				    </f:facet>
+					<p:column headerText="Nome" filterBy="#{manga.nome}" filterMatchMode="contains">
+						<h:outputLabel value="#{manga.nome}" />
+					</p:column>
+					<p:column headerText="Ano" sortBy="#{manga.anoLancamento}">
+						<h:outputLabel value="#{manga.anoLancamento}" />
+					</p:column>
+					<p:column headerText="Editora" sortBy="#{manga.editora.nome}">
+						<h:outputLabel value="#{manga.editora.nome}" />
+					</p:column>
+					<p:column headerText="Escritor" sortBy="#{manga.escritor.nome}">
+						<h:outputLabel value="#{manga.escritor.nome}" />
+					</p:column>
+					<p:column headerText="Ações" style="width: 100px; text-align: center;">
+						<p:commandButton icon="ui-icon-pencil" oncomplete="PF('dlgCadastro').show();" 
+							actionListener="#{mangaBean.carregarListas}" update="formCadastro">
+							<f:setPropertyActionListener value="#{manga}" target="#{mangaBean.manga}" />
+							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
+						
+						<p:commandButton icon="ui-icon-trash" update="@form" process="@this" action="#{mangaBean.excluir()}">
+							<p:confirm header="Excluir" message="Confirma exclus&#227;o desta manga?" icon="ui-icon-alert" />
+							<f:setPropertyActionListener value="#{manga}" target="#{mangaBean.mangaSelecionada}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+		
+		<p:dialog id="dlgCadastro" widgetVar="dlgCadastro" header="Titulo - Cadastro"
+			modal="true" resizable="false" responsive="true">
+			<h:form id="formCadastro">
+				<h:panelGrid columns="2">
+					<p:outputLabel for="nome" value="Nome" />
+					<p:inputText id="nome" value="#{mangaBean.manga.nome}" size="20"
+						required="true" requiredMessage="O campo 'Nome' é obrigatorio." />
+					
+					<p:outputLabel for="ano" value="Ano lançamento:" />
+					<p:inputText id="ano" value="#{mangaBean.manga.anoLancamento}" size="5"
+						required="true" requiredMessage="O campo 'Ano lançamento' é obrigatorio." />
+					
+					<p:outputLabel for="editora" value="Editora:" />
+			        <p:selectOneMenu id="editora" value="#{mangaBean.manga.editora}"
+			        	filter="true" filterMatchMode="contains" autoWidth="false" style="width: 120px"
+			        	required="true" requiredMessage="O campo 'Editora' é obrigatorio.">
+			            <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+			            <f:selectItems value="#{mangaBean.todasEditoras}" var="editora" itemValue="#{editora}" itemLabel="#{editora.nome}" />
+			        </p:selectOneMenu>
+			        
+					<p:outputLabel for="escritor" value="Escritor(a):" />
+			        <p:selectOneMenu id="escritor" value="#{mangaBean.manga.escritor}"
+			        	filter="true" filterMatchMode="contains" autoWidth="false" style="width: 120px"
+			        	required="true" requiredMessage="O campo 'Escritor' é obrigatorio.">
+			            <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+			            <f:selectItems value="#{mangaBean.todosEscritores}" var="escritor" itemValue="#{escritor}" itemLabel="#{escritor.nome}" />
+			        </p:selectOneMenu>
+			        
+			        <p:outputLabel for="tipo" value="Tipo:" />
+			        <p:selectOneButton id="tipo" value="#{mangaBean.manga.tipo}" 
+			        	required="true" requiredMessage="O campo 'Tipo' é obrigatorio.">
+			            <f:selectItems value="#{mangaBean.todosTipos}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+			        </p:selectOneButton>
+			        
+			        <p:commandButton value="Salvar" action="#{mangaBean.salvar()}" update=":formCadastro :formManga" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
