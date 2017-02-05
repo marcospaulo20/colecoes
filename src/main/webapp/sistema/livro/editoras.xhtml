@@ -37,7 +37,7 @@
 							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
 						</p:commandButton>
 						
-						<p:commandButton icon="ui-icon-trash" update="@form" process="@this" action="#{editoraBean.excluir()}">
+						<p:commandButton icon="ui-icon-trash" update="formEditora" process="@this" action="#{editoraBean.excluir()}">
 							<p:confirm header="Excluir" message="Confirma exclus&#227;o desta editora?" icon="ui-icon-alert" />
 							<f:setPropertyActionListener value="#{editora}" target="#{editoraBean.editoraSelecionada}" />
 						</p:commandButton>

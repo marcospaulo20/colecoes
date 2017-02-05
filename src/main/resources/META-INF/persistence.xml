@@ -10,6 +10,9 @@
 		
 		<class>br.com.mp.livro.model.Editora</class>
 		<class>br.com.mp.livro.manga.model.Manga</class>
+		<class>br.com.mp.livro.manga.model.Volume</class>
+		<class>br.com.mp.livro.manga.model.Capitulo</class>
+		<class>br.com.mp.livro.manga.model.ImagemVolumes</class>
 
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />

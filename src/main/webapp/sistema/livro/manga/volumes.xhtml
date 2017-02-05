@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<ui:composition template="../../../WEB-INF/template/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:define name="titulo">Volumes</ui:define>
+
+	<f:metadata>
+		<f:viewParam name="id" value="#{volumeBean.manga}"/>
+		<f:viewAction action="#{volumeBean.init}" />
+	</f:metadata>
+	
+	<ui:define name="corpo">
+		<h:form id="formVolume">
+			<p:panel id="panelVolume" header="Volume" style="margin-bottom:20px">
+				
+				<f:facet name="actions">
+					<p:commandButton value="Adicionar" icon="ui-icon-plus" actionListener="#{volumeBean.prepararCadastro}"
+						oncomplete="PF('dlgCadastro').show();" update="formCadastro" style="float:right">
+						<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+					</p:commandButton>
+				</f:facet>
+				
+				<p:panel id="panelTotalCapitulo">
+					<h:outputText value="Total capitulos: #{volumeBean.quantidadeTotalCapitulos()}" />
+				</p:panel>
+				
+				<p:dataTable id="tabelaVolume" value="#{volumeBean.todosVolumes}" var="volume" widgetVar="tabelaVolume"
+					paginator="true" rows="2" paginatorPosition="bottom"
+					selectionMode="single" selection="#{volumeBean.volumeSelecionado}" rowKey="#{volume.id}"
+					emptyMessage="Nenhum volume foi encontrado.">
+					<f:facet name="header">
+						Lista de volumes
+					</f:facet>
+
+					<p:ajax event="rowSelect" listener="#{volumeBean.onRowSelect}" update="formCapitulo" />
+					
+					<p:column headerText="Capa">
+						<o:graphicImage value="#{imagensVolumesGraphicBean.get(volume.id)}" 
+							lastModified="#{imagensVolumesBean.ultimaModificaoFoto(volume)}" height="150" width="100" />
+					</p:column>
+					
+					<p:column headerText="Nome" filterBy="#{volume.nome}" filterMatchMode="contains">
+						<h:outputLabel value="#{volume.nome}" />
+					</p:column>
+					
+					<p:column headerText="Data publicação">
+						<h:outputText value="#{volume.dataPublicacao}">
+							<f:convertDateTime locale="pt_BR" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Preço" rendered="#{volumeBean.mangaFisico}">
+						<h:outputText value="#{volume.preco}">
+							<f:convertNumber type="currency" currencySymbol="R$" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Tem">
+						<p:selectBooleanCheckbox value="#{volume.tem}">
+							<p:ajax partialSubmit="true" resetValues="true" listener="#{volumeBean.atualizarVolume(volume, volume.tem)}" update="formVolume" />
+						</p:selectBooleanCheckbox>						
+					</p:column>									
+					
+					<p:column headerText="Ações" style="width: 100px; text-align: center;">
+						<p:commandButton icon="ui-icon-pencil" oncomplete="PF('dlgCadastro').show();" 
+							actionListener="#{volumeBean.carregarListas}" update="formCadastro">
+							<f:setPropertyActionListener value="#{volume}" target="#{volumeBean.volume}" />
+							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
+						
+						<p:commandButton icon="ui-icon-trash" update="@form" process="@this" action="#{volumeBean.excluir()}">
+							<p:confirm header="Excluir" message="Confirma exclus&#227;o desta volume?" icon="ui-icon-alert" />
+							<f:setPropertyActionListener value="#{volume}" target="#{volumeBean.volumeSelecionado}" />
+						</p:commandButton>
+					</p:column>
+					
+					<f:facet name="footer">
+			        	No total h&#225; #{fn:length(volumeBean.todosVolumes)} volumes.
+			    	</f:facet>
+				</p:dataTable>	
+			</p:panel>
+		</h:form>
+		
+		<div>
+			<ui:include src="/sistema/livro/manga/capitulos.xhtml" />
+		</div>
+		
+		<p:dialog id="dlgCadastro" widgetVar="dlgCadastro" header="Volume - Cadastro"
+			modal="true" resizable="false" responsive="true">
+			<h:form id="formCadastro">
+				<h:panelGrid columns="2">
+					<p:outputLabel for="nome" value="Nome:" />
+					<p:inputText id="nome" value="#{volumeBean.volume.nome}" size="20"
+						required="true" requiredMessage="O campo 'Nome' é obrigatorio." />
+					
+					<p:outputLabel for="dataPublicacao" value="Data de publicação:" />
+					<p:calendar id="dataPublicacao" size="12" pattern="dd/MM/yyyy" 
+						value="#{volumeBean.volume.dataPublicacao}" />
+					
+					<p:outputLabel for="artista" value="Artista:" />
+			        <p:selectOneMenu id="artista" value="#{volumeBean.volume.artista}"
+			        	filter="true" filterMatchMode="contains" autoWidth="false" style="width: 120px"
+			        	required="true" requiredMessage="O campo 'Artista' é obrigatorio.">
+			            <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+			            <f:selectItems value="#{volumeBean.todosArtista}" var="artista" itemValue="#{artista}" itemLabel="#{artista.nome}" />
+			        </p:selectOneMenu>
+			        
+			        <p:outputLabel for="capista" value="Capista:" />
+			        <p:selectOneMenu id="capista" value="#{volumeBean.volume.capista}"
+			        	filter="true" filterMatchMode="contains" autoWidth="false" style="width: 120px">
+			            <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+			            <f:selectItems value="#{volumeBean.todosCapista}" var="capista" itemValue="#{capista}" itemLabel="#{capista.nome}" />
+			        </p:selectOneMenu>
+			        
+			        <p:outputLabel for="tem" value="Tem:" />
+					<p:selectBooleanCheckbox id="tem" value="#{volumeBean.volume.tem}" />
+				</h:panelGrid>				
+				<h:panelGrid columns="2" rendered="#{volumeBean.mangaFisico}">
+					<p:outputLabel for="preco" value="Preço:" />
+					<p:inputNumber id="preco" value="#{volumeBean.volume.preco}" size="10" />
+					
+					<p:outputLabel for="editor" value="Editor:" />
+			        <p:selectOneMenu id="editor" value="#{volumeBean.volume.editor}"
+			        	filter="true" filterMatchMode="contains" autoWidth="false" style="width: 120px">
+			            <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+			            <f:selectItems value="#{volumeBean.todosEditores}" var="editor" itemValue="#{editor}" itemLabel="#{editor.nome}" />
+			        </p:selectOneMenu>
+				</h:panelGrid>
+				<p:commandButton value="Salvar" action="#{volumeBean.salvar()}" update=":formCadastro :formVolume" /> 
+			</h:form>
+		</p:dialog>	
+	</ui:define>
+</ui:composition>

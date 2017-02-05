@@ -26,13 +26,22 @@ public class MangasDAO implements Mangas, Serializable {
 
 	@Override
 	public List<Manga> todos() {
-		TypedQuery<Manga> query = this.manager.createQuery("SELECT m FROM Manga m ORDER BY m.nome", Manga.class);
+		TypedQuery<Manga> query = this.manager
+				.createQuery("SELECT m FROM Manga m "
+						+ "JOIN FETCH m.licenciador "
+						+ "JOIN FETCH m.autor "
+						+ "ORDER BY m.nome", Manga.class);
 		return query.getResultList();
 	}
 	
 	@Override
 	public List<Manga> todosPorTipo(Tipo tipo) {
-		TypedQuery<Manga> query = this.manager.createQuery("SELECT m FROM Manga m WHERE m.tipo = :tipo ORDER BY m.nome", Manga.class);
+		TypedQuery<Manga> query = this.manager
+				.createQuery("SELECT m FROM Manga m "
+						+ "LEFT JOIN FETCH m.licenciador "
+						+ "JOIN FETCH m.autor "
+						+ "JOIN FETCH m.editora "
+						+ "WHERE m.tipo = :tipo ORDER BY m.nome", Manga.class);
 		query.setParameter("tipo", tipo);
 		return query.getResultList();
 	}
