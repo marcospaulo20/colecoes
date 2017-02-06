@@ -36,7 +36,7 @@
 							<f:param name="id" value="#{manga.id}"/>
 						</h:link>
 					</p:column>
-					<p:column headerText="Ano" sortBy="#{manga.anoLancamento}">
+					<p:column headerText="Ano" sortBy="#{manga.anoLancamento}" styleClass="data">
 						<h:outputLabel value="#{manga.anoLancamento}" />
 					</p:column>
 					<p:column headerText="Editora" sortBy="#{manga.editora.nome}">
@@ -48,7 +48,7 @@
 					<p:column headerText="Status" sortBy="#{manga.status.descricao}">
 						<h:outputLabel value="#{manga.status.descricao}" />
 					</p:column>
-					<p:column headerText="Nº volumes">
+					<p:column headerText="Nº volumes" styleClass="numero">
 						<h:outputLabel value="#{manga.volumes.size()}" />
 					</p:column>
 					<p:column headerText="Ações" style="width: 100px; text-align: center;">
@@ -95,6 +95,13 @@
 			            <f:selectItems value="#{mangaBean.todosAutores}" var="autor" itemValue="#{autor}" itemLabel="#{autor.nome}" />
 			        </p:selectOneMenu>
 			        
+			        <p:outputLabel for="status" value="Status:" />
+			        <p:selectOneMenu id="status" value="#{mangaBean.manga.status}" 
+			        	required="true" requiredMessage="O campo 'Status' é obrigatorio." >
+			        	<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+			            <f:selectItems value="#{mangaBean.todosStatus}" var="status" itemValue="#{status}" itemLabel="#{status.descricao}" />
+			        </p:selectOneMenu>
+			        
 			        <p:outputLabel for="tipo" value="Tipo:" />
 			        <p:selectOneButton id="tipo" value="#{mangaBean.manga.tipo}" 
 			        	required="true" requiredMessage="O campo 'Tipo' é obrigatorio.">
@@ -116,13 +123,6 @@
 			        	required="true" requiredMessage="O campo 'Categoria' é obrigatorio." rendered="#{mangaBean.fisico}">
 			        	<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
 			            <f:selectItems value="#{mangaBean.todasCategorias}" var="categoria" itemValue="#{categoria}" itemLabel="#{categoria.descricao}" />
-			        </p:selectOneMenu>
-			        
-			        <p:outputLabel for="status" value="Status:" rendered="#{mangaBean.fisico}" />
-			        <p:selectOneMenu id="status" value="#{mangaBean.manga.status}" 
-			        	required="true" requiredMessage="O campo 'Status' é obrigatorio." rendered="#{mangaBean.fisico}">
-			        	<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
-			            <f:selectItems value="#{mangaBean.todosStatus}" var="status" itemValue="#{status}" itemLabel="#{status.descricao}" />
 			        </p:selectOneMenu>
 		        </h:panelGrid>
 			    <p:commandButton value="Salvar" action="#{mangaBean.salvar()}" update=":formCadastro :formManga:panelManga" /> 

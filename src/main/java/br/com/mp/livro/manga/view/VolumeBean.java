@@ -54,6 +54,7 @@ public class VolumeBean implements Serializable {
 	
 	public void prepararCadastro() {
 		this.volume = new Volume();
+		this.volume.setManga(this.manga);
 		carregarListas();
 	}
 
@@ -61,14 +62,19 @@ public class VolumeBean implements Serializable {
 		this.todosArtista = pessoas.todasPorTipo(TipoPessoa.ARTISTA);
 		this.todosCapista = pessoas.todasPorTipo(TipoPessoa.CAPISTA);
 		if(this.isMangaFisico()) {
-			this.volume.setManga(this.manga);
 			this.todosEditores = pessoas.todasPorTipo(TipoPessoa.EDITOR);
 		}
 	}
 	
 	private void carregarListaVolumes() {
-		if(this.isMangaFisico())
+		if(this.isNuloManga())
 			this.todosVolumes = volumes.todosPorManga(this.manga);
+	}
+	
+	private boolean isNuloManga() {
+		if(this.manga != null)
+			return true;
+		return false;
 	}
 	
 	public boolean isMangaFisico() {
@@ -166,15 +172,29 @@ public class VolumeBean implements Serializable {
 		return todosEditores;
 	}
 	
-	public long quantidadeTotalCapitulos() {
-		if(this.todosVolumes.size() > 0) {
-			long qt = 0;
-			for(Volume v : this.todosVolumes) {
-				if(!v.getCapitulos().isEmpty())
-					qt += v.getCapitulos().stream().count();
+	public double precoTotal() {
+		if(this.isMangaFisico()) {
+			if(this.todosVolumes.size() > 0) {
+				double somaTotal = 0.0;
+				for(Volume v : this.todosVolumes)
+					somaTotal += v.getPreco();
+				return somaTotal;
 			}
-			return qt;
 		}
-		return 0;
+		return 0.0;
 	}
+	
+	public Double precoTotalFatam() {
+		if(this.isMangaFisico()) {
+			if(this.todosVolumes.size() > 0) {
+				double somaTotal = 0.0;
+				for(Volume v : this.todosVolumes)
+					if(v.isTem() == false)
+						somaTotal += v.getPreco();
+				return somaTotal;
+			}
+		}
+		return 0.0;
+	}
+	
 }

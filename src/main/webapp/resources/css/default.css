@@ -14,3 +14,19 @@ footer {
 	width: 35px;
 	height: 35px;
 }
+
+.data {
+	text-align: center;
+}
+
+.check {
+	text-align: center;
+}
+
+.valor {
+	text-align: center;
+}
+
+.numero {
+	text-align: center;
+}

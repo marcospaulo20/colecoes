@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import br.com.mp.livro.manga.model.Capitulo;
+import br.com.mp.livro.manga.model.Manga;
 import br.com.mp.livro.manga.model.Volume;
 import br.com.mp.livro.manga.repository.Capitulos;
 import br.com.mp.util.RegraNegocioException;
@@ -34,10 +35,21 @@ public class CapitulosDAO implements Capitulos, Serializable {
 	public List<Capitulo> todosPorVolume(Volume volume) {
 		TypedQuery<Capitulo> query = this.manager
 				.createQuery("SELECT c FROM Capitulo c "						
-						+ "JOIN FETCH c.volume "
+						//+ "JOIN FETCH c.volume "
 						+ "WHERE c.volume = :volume "
 						+ "ORDER BY c.numero", Capitulo.class);
 		query.setParameter("volume", volume);
+		return query.getResultList();
+	}
+	
+	@Override
+	public List<Capitulo> todosCapitulosPorManga(Manga manga) {
+		TypedQuery<Capitulo> query = this.manager
+					.createQuery("SELECT c FROM Capitulo c "							
+							+ "JOIN FETCH c.volume "
+							+ "WHERE c.volume.manga = :manga "
+							+ "ORDER BY c.numero", Capitulo.class);
+		query.setParameter("manga", manga);
 		return query.getResultList();
 	}
 

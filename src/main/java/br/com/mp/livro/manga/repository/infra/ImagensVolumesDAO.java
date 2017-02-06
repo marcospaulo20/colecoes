@@ -24,7 +24,7 @@ public class ImagensVolumesDAO implements ImagensVolumes, Serializable {
 	}
 
 	@Override
-	public ImagemVolumes todosPorVolume(Long id) {
+	public ImagemVolumes porVolume(Long id) {
 		try {
 			TypedQuery<ImagemVolumes> query = this.manager
 					.createQuery("SELECT i FROM ImagemVolumes i "						
@@ -47,6 +47,22 @@ public class ImagensVolumesDAO implements ImagensVolumes, Serializable {
 	@Transactional
 	public ImagemVolumes salvar(ImagemVolumes imagemVolumes) throws RegraNegocioException {
 		return this.manager.merge(imagemVolumes);
+	}
+
+	@Override
+	public boolean isExistirPorVolume(Long id) {
+		try {
+			TypedQuery<ImagemVolumes> query = this.manager
+					.createQuery("SELECT i FROM ImagemVolumes i "						
+							+ "WHERE i.volume.id = :id ", ImagemVolumes.class)
+					.setParameter("id", id);
+			ImagemVolumes imagemVolumes = query.getSingleResult();
+			if(imagemVolumes==null)
+				return false;
+			return true;
+		} catch(NoResultException e) {
+			return false;
+		}
 	}
 
 }

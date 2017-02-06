@@ -17,7 +17,14 @@
 	
 	<ui:define name="corpo">
 		<h:form id="formVolume">
-			<p:panel id="panelVolume" header="Volume" style="margin-bottom:20px">
+			<p:panel>
+		    	<p:breadCrumb>
+				    <p:menuitem url="/home.xhtml" />
+				    <p:menuitem value="Titulos" url="/sistema/livro/manga/mangas.xhtml" />
+				</p:breadCrumb>
+		    </p:panel>
+		
+			<p:panel id="panelVolume" header="#{volumeBean.manga.nome} - Volumes" style="margin-bottom:20px">
 				
 				<f:facet name="actions">
 					<p:commandButton value="Adicionar" icon="ui-icon-plus" actionListener="#{volumeBean.prepararCadastro}"
@@ -26,8 +33,16 @@
 					</p:commandButton>
 				</f:facet>
 				
-				<p:panel id="panelTotalCapitulo">
-					<h:outputText value="Total capitulos: #{volumeBean.quantidadeTotalCapitulos()}" />
+				<p:panel id="panelTotalCapitulo">				
+					<h:outputText value="Total capitulos: #{capituloBean.quantidadeTotalCapitulos()}" />
+					<h:panelGrid rendered="#{volumeBean.mangaFisico}">
+						<h:outputText value="#{volumeBean.precoTotal()}">
+							<f:convertNumber type="currency" currencySymbol="R$" />
+						</h:outputText>
+						<h:outputText value="#{volumeBean.precoTotalFatam()}">
+							<f:convertNumber type="currency" currencySymbol="R$" />
+						</h:outputText>
+					</h:panelGrid>
 				</p:panel>
 				
 				<p:dataTable id="tabelaVolume" value="#{volumeBean.todosVolumes}" var="volume" widgetVar="tabelaVolume"
@@ -49,19 +64,19 @@
 						<h:outputLabel value="#{volume.nome}" />
 					</p:column>
 					
-					<p:column headerText="Data publicação">
+					<p:column headerText="Data publicação" styleClass="data">
 						<h:outputText value="#{volume.dataPublicacao}">
 							<f:convertDateTime locale="pt_BR" />
 						</h:outputText>
 					</p:column>
 					
-					<p:column headerText="Preço" rendered="#{volumeBean.mangaFisico}">
+					<p:column headerText="Preço" rendered="#{volumeBean.mangaFisico}" styleClass="valor">
 						<h:outputText value="#{volume.preco}">
 							<f:convertNumber type="currency" currencySymbol="R$" />
 						</h:outputText>
 					</p:column>
 					
-					<p:column headerText="Tem">
+					<p:column headerText="Tem" styleClass="check">
 						<p:selectBooleanCheckbox value="#{volume.tem}">
 							<p:ajax partialSubmit="true" resetValues="true" listener="#{volumeBean.atualizarVolume(volume, volume.tem)}" update="formVolume" />
 						</p:selectBooleanCheckbox>						
@@ -83,7 +98,7 @@
 					<f:facet name="footer">
 			        	No total h&#225; #{fn:length(volumeBean.todosVolumes)} volumes.
 			    	</f:facet>
-				</p:dataTable>	
+				</p:dataTable>
 			</p:panel>
 		</h:form>
 		
@@ -132,7 +147,7 @@
 			            <f:selectItems value="#{volumeBean.todosEditores}" var="editor" itemValue="#{editor}" itemLabel="#{editor.nome}" />
 			        </p:selectOneMenu>
 				</h:panelGrid>
-				<p:commandButton value="Salvar" action="#{volumeBean.salvar()}" update=":formCadastro :formVolume" /> 
+				<p:commandButton value="Salvar" action="#{volumeBean.salvar()}" update=":formCadastro :formVolume:panelVolume" /> 
 			</h:form>
 		</p:dialog>	
 	</ui:define>

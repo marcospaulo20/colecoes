@@ -4,63 +4,81 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:o="http://omnifaces.org/ui">
 
-	<ui:define name="titulo">Capas Volumes</ui:define>
+	<ui:define name="titulo">Capas de Volumes</ui:define>
 
 	<ui:define name="corpo">
 		<h:form id="formManga">
-			<p:panel id="panelCapasVolume" header="Capas volume" style="margin-bottom:20px">
+			<p:panel id="panelCapasVolume" header="Capas de volumes" style="margin-bottom:20px">
 				
 				<f:facet name="actions">
-					<p:selectOneButton value="#{mangaBean.tipoSelecionado}">
-			            <f:selectItems value="#{mangaBean.todosTipos}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
-			            <p:ajax event="change" listener="#{mangaBean.mundarTipoManga}" update=":formManga:tabelaManga" />
+					<p:selectOneButton value="#{imagensVolumesBean.tipoSelecionado}">
+			            <f:selectItems value="#{imagensVolumesBean.todosTipos}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+			            <p:ajax event="change" listener="#{imagensVolumesBean.mundarTipoManga}" update=":formManga:tabelaManga :formVolume" />
 			        </p:selectOneButton>					
 				</f:facet>
 				
-				<p:dataTable id="tabelaManga" value="#{mangaBean.todosMangas}" var="manga" widgetVar="tabelaManga"
+				<p:dataTable id="tabelaManga" value="#{imagensVolumesBean.todosMangas}" var="manga" widgetVar="tabelaManga"
 					paginator="true" rows="5" paginatorPosition="bottom"
+					selectionMode="single" selection="#{imagensVolumesBean.mangaSelecionado}" rowKey="#{manga.id}"
 					emptyMessage="Nenhum titulo foi encontrado.">
+					
+					<p:ajax event="rowSelect" listener="#{imagensVolumesBean.onRowSelect}" update="formVolume" />
+					
 					<f:facet name="header">
 				        Lista de Titulos
 				    </f:facet>
 					<p:column headerText="Nome" filterBy="#{manga.nome}" filterMatchMode="contains">
-						<h:link outcome="volumes">
-							<h:outputLabel value="#{manga.nome}" />
-							<f:param name="id" value="#{manga.id}"/>
-						</h:link>
+						<h:outputLabel value="#{manga.nome}" />
 					</p:column>
-					<p:column headerText="Ano" sortBy="#{manga.anoLancamento}">
+					<p:column headerText="Ano" sortBy="#{manga.anoLancamento}" styleClass="data">
 						<h:outputLabel value="#{manga.anoLancamento}" />
 					</p:column>
 					<p:column headerText="Editora" sortBy="#{manga.editora.nome}">
 						<h:outputLabel value="#{manga.editora.nome}" />
-					</p:column>				
-					<p:column headerText="Ações" style="width: 100px; text-align: center;">
-						<p:commandButton icon="ui-icon-pencil" oncomplete="PF('dlgCadastro').show();" 
-							actionListener="#{mangaBean.carregarListas}" update="formCadastro">
-							<f:setPropertyActionListener value="#{manga}" target="#{mangaBean.manga}" />
-							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
-						</p:commandButton>
-						
-						<p:commandButton icon="ui-icon-trash" update="@form" process="@this" action="#{mangaBean.excluir()}">
-							<p:confirm header="Excluir" message="Confirma exclus&#227;o desta manga?" icon="ui-icon-alert" />
-							<f:setPropertyActionListener value="#{manga}" target="#{mangaBean.mangaSelecionada}" />
-						</p:commandButton>
 					</p:column>
 				</p:dataTable>
 			</p:panel>
 		</h:form>
 		
-		<p:dialog id="dlgCadastro" widgetVar="dlgCadastro" header="Titulo - Cadastro"
+		<h:form id="formVolume">
+			<p:dataGrid var="volume" value="#{imagensVolumesBean.todosVolumes}" columns="3" layout="grid"
+		        rows="12" paginator="true" id="volumes"
+		        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		        rowsPerPageTemplate="6,12,16"
+		        emptyMessage="Nenhum volume foi encontrado ou nenhum manga foi selecionado.">
+		        
+		        <p:panel header="#{volume.nome}" style="text-align:center">
+		            <h:panelGrid columns="1" style="width:100%">
+		                <p:commandLink update="formImagensVolumes" oncomplete="PF('dlgImagensVolumes').show()">
+		                	<o:graphicImage value="#{imagensVolumesGraphicBean.get(volume.id)}" 
+								lastModified="#{imagensVolumesBean.ultimaModificaoFoto(volume)}" height="150" width="100" />
+							<f:setPropertyActionListener value="#{volume}" target="#{imagensVolumesBean.volumeSelecionado}" />
+						</p:commandLink>
+						
+		                <h:outputText value="#{volume.dataPublicacao}" />
+		            </h:panelGrid>
+		        </p:panel>
+			</p:dataGrid>
+		</h:form>
+		
+		<p:dialog id="dlgImagensVolumes" widgetVar="dlgImagensVolumes" header="Capa de Volume - Upload"
 			modal="true" resizable="false" responsive="true">
-			<h:form id="formCadastro">
-				<h:panelGrid columns="2">
-					
-		        </h:panelGrid>
-			    <p:commandButton value="Salvar" action="#{mangaBean.salvar()}" update=":formCadastro :formManga" /> 
+			<h:form id="formImagensVolumes">
+				<p:panel id="panelImagemVolume">
+					<h:panelGrid columns="2">
+						<p:outputLabel for="nome" value="Nome:" />
+						<p:inputText id="nome" value="#{imagensVolumesBean.volumeSelecionado.nome}" disabled="true" size="32" />
+					</h:panelGrid>
+					<h:panelGrid columns="1">
+						<p:fileUpload fileUploadListener="#{imagensVolumesBean.salvar}" mode="advanced" dragDropSupport="false"
+           					sizeLimit="1000000" fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+					</h:panelGrid>												
+				</p:panel>
 			</h:form>
-		</p:dialog>
+		</p:dialog>	
+        
 	</ui:define>
 </ui:composition>

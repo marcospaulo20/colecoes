@@ -38,9 +38,9 @@ public class VolumesDAO implements Volumes, Serializable {
 							+ "JOIN FETCH v.capista "
 							+ "LEFT JOIN FETCH v.editor "
 							+ "JOIN FETCH v.manga "
-							//+ "RIGHT OUTER JOIN FETCH v.capitulos "
+							//+ "LEFT OUTER JOIN FETCH v.capitulos "
 							+ "WHERE v.manga = :manga "
-							+ "ORDER BY v.nome", Volume.class);
+							+ "ORDER BY v.dataPublicacao", Volume.class);
 		query.setParameter("manga", manga);
 		return query.getResultList();
 	}

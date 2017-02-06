@@ -12,6 +12,7 @@ import javax.inject.Named;
 import org.omnifaces.util.Messages;
 
 import br.com.mp.livro.manga.model.Capitulo;
+import br.com.mp.livro.manga.model.Manga;
 import br.com.mp.livro.manga.model.Volume;
 import br.com.mp.livro.manga.repository.Capitulos;
 import br.com.mp.util.RegraNegocioException;
@@ -58,7 +59,7 @@ public class CapituloBean implements Serializable {
 			this.todosCapitulos = capitulos.todosPorVolume(this.volume);
 			this.capitulo = new Capitulo();
 			this.capitulo.setVolume(this.volume);
-			this.volumeBean.quantidadeTotalCapitulos();
+			this.quantidadeTotalCapitulos();
 
 			Messages.addFlashGlobalInfo("O capitulo foi salvo com sucesso!");
 		} catch (RegraNegocioException e) {
@@ -71,7 +72,7 @@ public class CapituloBean implements Serializable {
 		try {
 			this.capitulos.remover(this.capituloSelecionado);
 			this.todosCapitulos = capitulos.todosPorVolume(this.volume);
-			this.volumeBean.quantidadeTotalCapitulos();
+			this.quantidadeTotalCapitulos();
 			
 			Messages.addFlashGlobalInfo("Capitulo excluido com sucesso!");
 		} catch (RegraNegocioException e) {
@@ -137,5 +138,13 @@ public class CapituloBean implements Serializable {
 
 	public List<Capitulo> getTodosCapitulos() {
 		return todosCapitulos;
+	}
+	
+	public long quantidadeTotalCapitulos() {
+		Manga manga = this.volumeBean.getManga();
+		List<Capitulo> listaCapitulos = this.capitulos.todosCapitulosPorManga(manga);
+		if(listaCapitulos.size() > 0) 
+			return listaCapitulos.stream().count();
+		return 0;
 	}
 }
