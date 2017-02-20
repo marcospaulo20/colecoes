@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<ui:composition template="../../../WEB-INF/template/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="titulo">HQs</ui:define>
+
+	<ui:define name="corpo">
+		<h:form id="formHQ">
+			<p:panel id="panelHQ" header="HQ" style="margin-bottom:20px">
+				
+				<f:facet name="actions">
+					<p:commandButton value="Adicionar" icon="ui-icon-plus" actionListener="#{hqBean.prepararCadastro}"
+						oncomplete="PF('dlgCadastro').show();" update="formCadastro" style="float:right">
+						<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+					</p:commandButton>
+					
+					<p:selectOneButton value="#{hqBean.tipoSelecionado}">
+			            <f:selectItems value="#{hqBean.todosTipos}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+			            <p:ajax event="change" listener="#{hqBean.mundarTipoHQ}" update=":formHQ:tabelaHQ" />
+			        </p:selectOneButton>
+				</f:facet>
+				
+				<p:dataTable id="tabelaHQ" value="#{hqBean.todosHQs}" var="hq" widgetVar="tabelaHQ"
+					paginator="true" rows="5" paginatorPosition="bottom"
+					emptyMessage="Nenhum titulo foi encontrado.">
+					<f:facet name="header">
+				        Lista de titulos
+				    </f:facet>
+					<p:column headerText="Nome" filterBy="#{hq.nome}" filterMatchMode="contains">
+						<h:link outcome="edicoes">
+							<h:outputLabel value="#{hq.nome}" />
+							<f:param name="id" value="#{hq.id}"/>
+						</h:link>
+					</p:column>
+					<p:column headerText="Ano" sortBy="#{hq.anoLancamento}" styleClass="data">
+						<h:outputLabel value="#{hq.anoLancamento}" />
+					</p:column>
+					<p:column headerText="Editora" sortBy="#{hq.editora.nome}">
+						<h:outputLabel value="#{hq.editora.nome}" />
+					</p:column>
+					<p:column headerText="Status" sortBy="#{hq.status.descricao}">
+						<h:outputLabel value="#{hq.status.descricao}" />
+					</p:column>
+					<p:column headerText="Nº edições" styleClass="numero">
+						<h:outputLabel value="#{hq.edicoes.size()}" />
+					</p:column>
+					<p:column headerText="Ações" style="width: 100px; text-align: center;">
+						<p:commandButton icon="ui-icon-pencil" oncomplete="PF('dlgCadastro').show();" 
+							actionListener="#{hqBean.carregarListas}" update="formCadastro">
+							<f:setPropertyActionListener value="#{hq}" target="#{hqBean.hq}" />
+							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
+						
+						<p:commandButton icon="ui-icon-trash" update="@form" process="@this" action="#{hqBean.excluir()}">
+							<p:confirm header="Excluir" message="Confirma exclus&#227;o desta hq?" icon="ui-icon-alert" />
+							<f:setPropertyActionListener value="#{hq}" target="#{hqBean.hqSelecionada}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+		
+		<p:dialog id="dlgCadastro" widgetVar="dlgCadastro" header="Titulo - Cadastro"
+			modal="true" resizable="false" responsive="true">
+			<h:form id="formCadastro">
+				<h:panelGrid columns="2">
+					<p:outputLabel for="nome" value="Nome" />
+					<p:inputText id="nome" value="#{hqBean.hq.nome}" size="20"
+						required="true" requiredMessage="O campo 'Nome' é obrigatorio." />
+					
+					<p:outputLabel for="ano" value="Ano lançamento:" />
+					<p:inputText id="ano" value="#{hqBean.hq.anoLancamento}" size="5"
+						required="true" requiredMessage="O campo 'Ano lançamento' é obrigatorio." />
+					
+					<p:outputLabel for="editora" value="Editora:" />
+			        <p:selectOneMenu id="editora" value="#{hqBean.hq.editora}"
+			        	filter="true" filterMatchMode="contains" autoWidth="false" style="width: 120px"
+			        	required="true" requiredMessage="O campo 'Editora' é obrigatorio.">
+			            <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+			            <f:selectItems value="#{hqBean.todasEditoras}" var="editora" itemValue="#{editora}" itemLabel="#{editora.nome}" />
+			        </p:selectOneMenu>
+			        
+			        <p:outputLabel for="status" value="Status:" />
+			        <p:selectOneMenu id="status" value="#{hqBean.hq.status}" 
+			        	required="true" requiredMessage="O campo 'Status' é obrigatorio." >
+			        	<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+			            <f:selectItems value="#{hqBean.todosStatus}" var="status" itemValue="#{status}" itemLabel="#{status.descricao}" />
+			        </p:selectOneMenu>
+			        
+			        <p:outputLabel for="categoria" value="Categoria:" />
+			        <p:selectOneMenu id="categoria" value="#{hqBean.hq.categoria}" 
+			        	required="true" requiredMessage="O campo 'Categoria' é obrigatorio.">
+			        	<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+			            <f:selectItems value="#{hqBean.todasCategorias}" var="categoria" itemValue="#{categoria}" itemLabel="#{categoria.descricao}" />
+			        </p:selectOneMenu>
+			        
+			        <p:outputLabel for="tipo" value="Tipo:" />
+			        <p:selectOneButton id="tipo" value="#{hqBean.hq.tipo}" 
+			        	required="true" requiredMessage="O campo 'Tipo' é obrigatorio.">
+			        	<p:ajax event="change" listener="#{hqBean.tipoModificadao}" update=":formCadastro:panelInvisivel" />
+			            <f:selectItems value="#{hqBean.todosTipos}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+			        </p:selectOneButton>
+				</h:panelGrid>
+				<h:panelGrid columns="2" id="panelInvisivel">
+					<p:outputLabel for="licenciador" value="Licenciador:" rendered="#{hqBean.fisico}" />
+			        <p:selectOneMenu id="licenciador" value="#{hqBean.hq.licenciador}"
+			        	filter="true" filterMatchMode="contains" autoWidth="false" style="width: 120px"
+			        	required="true" requiredMessage="O campo 'Licenciador' é obrigatorio." rendered="#{hqBean.fisico}">
+			            <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+			            <f:selectItems value="#{hqBean.todasEditoras}" var="licenciador" itemValue="#{licenciador}" itemLabel="#{licenciador.nome}" />
+			        </p:selectOneMenu>
+		        </h:panelGrid>
+			    <p:commandButton value="Salvar" action="#{hqBean.salvar()}" update=":formCadastro :formHQ:panelHQ" /> 
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

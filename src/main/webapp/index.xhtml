@@ -30,11 +30,11 @@
 						value="#{usuarioLoginBean.usuario.senha}" />
 						
 					<p:commandButton value="Acessar" id="commandButton-acessar"
-						action="#{usuarioLoginBean.efetuarLogin()}" update=":mensagem" />		
+						action="#{usuarioLoginBean.efetuarLogin()}" update=":mensagem" onstart="PF('ajaxStatus').show()" />		
 				</h:panelGrid>
 			</p:panel>
 			
-			<p:ajaxStatus styleClass="ajax-status">
+			<p:ajaxStatus styleClass="ajax-status" widgetVar="ajaxStatus">
 				<f:facet name="start">
 					<h:graphicImage library="imagens" name="loading.gif" />
 				</f:facet>

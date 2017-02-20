@@ -23,7 +23,7 @@
 					paginator="true" rows="5" paginatorPosition="bottom"
 					emptyMessage="Nenhuma editora foi encontrada.">
 					<f:facet name="header">
-				        Lista de Editoras
+				        Lista de editoras
 				    </f:facet>
 					<p:column headerText="Nome" filterBy="#{editora.nome}" filterMatchMode="contains">
 						<h:outputLabel value="#{editora.nome}" />
@@ -59,9 +59,10 @@
 			        	filter="true" filterMatchMode="contains" autoWidth="false" style="width: 120px"
 			        	required="true" requiredMessage="O campo 'Nome' é obrigatorio.">
 			            <f:selectItem itemLabel="Selecione um País" itemValue="" />
-			            <f:selectItem itemLabel="Japão" itemValue="Japão" />
 			            <f:selectItem itemLabel="Brasil" itemValue="Brasil" />
 			            <f:selectItem itemLabel="Estados Unidos" itemValue="Estados Unidos" />
+			            <f:selectItem itemLabel="Italia" itemValue="Italia" />
+			            <f:selectItem itemLabel="Japão" itemValue="Japão" />
 			        </p:selectOneMenu>
 			        
 			        <p:commandButton value="Salvar" action="#{editoraBean.salvar()}" update=":formCadastro :formEditora" />

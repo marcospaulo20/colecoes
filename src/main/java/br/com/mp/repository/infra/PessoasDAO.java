@@ -32,7 +32,8 @@ public class PessoasDAO implements Pessoas, Serializable {
 
 	@Override
 	public List<Pessoa> todasPorTipo(TipoPessoa tipoPessoa) {
-		TypedQuery<Pessoa> query = this.manager.createQuery("SELECT p FROM Pessoa p WHERE p.tipoPessoa = :tipo", Pessoa.class);
+		TypedQuery<Pessoa> query = this.manager
+				.createQuery("SELECT p FROM Pessoa p WHERE p.tipoPessoa = :tipo ORDER BY p.nome", Pessoa.class);
 		query.setParameter("tipo", tipoPessoa);
 		return query.getResultList();
 	}
@@ -54,6 +55,15 @@ public class PessoasDAO implements Pessoas, Serializable {
 		pessoa = this.porId(pessoa.getId());
 		
 		this.manager.remove(pessoa);
+	}
+
+	@Override
+	public List<Pessoa> todosPorTipo(TipoPessoa tipoPessoa) {
+		TypedQuery<Pessoa> query = this.manager
+				.createQuery("SELECT p FROM Pessoa p "
+						+ "WHERE p.tipoPessoa = :tipo ORDER BY p.nome", Pessoa.class);
+		query.setParameter("tipo", tipoPessoa);
+		return query.getResultList();
 	}
 
 }

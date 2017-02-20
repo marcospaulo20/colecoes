@@ -21,7 +21,7 @@
 					<p:selectOneButton value="#{mangaBean.tipoSelecionado}">
 			            <f:selectItems value="#{mangaBean.todosTipos}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
 			            <p:ajax event="change" listener="#{mangaBean.mundarTipoManga}" update=":formManga:tabelaManga" />
-			        </p:selectOneButton>					
+			        </p:selectOneButton>
 				</f:facet>
 				
 				<p:dataTable id="tabelaManga" value="#{mangaBean.todosMangas}" var="manga" widgetVar="tabelaManga"

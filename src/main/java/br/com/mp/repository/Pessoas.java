@@ -14,4 +14,5 @@ public interface Pessoas {
 	
 	Pessoa salvar(Pessoa pessoa) throws RegraNegocioException;
 	void remover(Pessoa pessoa) throws RegraNegocioException;
+	List<Pessoa> todosPorTipo(TipoPessoa tipoSelecionado);
 }

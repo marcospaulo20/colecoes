@@ -13,7 +13,11 @@
 		<class>br.com.mp.livro.manga.model.Volume</class>
 		<class>br.com.mp.livro.manga.model.Capitulo</class>
 		<class>br.com.mp.livro.manga.model.ImagemVolumes</class>
-
+		<class>br.com.mp.livro.hq.model.HQ</class>
+		<class>br.com.mp.livro.hq.model.Edicao</class>
+		<class>br.com.mp.livro.hq.model.ImagemEdicoes</class>
+		<class>br.com.mp.livro.hq.model.TituloHQ</class>
+		
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/db_colecoes" />

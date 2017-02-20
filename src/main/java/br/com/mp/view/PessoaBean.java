@@ -28,6 +28,8 @@ public class PessoaBean implements Serializable {
 	private Pessoa pessoa;
 	private Pessoa pessoaSelecionada;
 
+	private TipoPessoa tipoSelecionado;
+	
 	List<Pessoa> todasPessoas;
 
 	@PostConstruct
@@ -40,7 +42,7 @@ public class PessoaBean implements Serializable {
 	public void salvar() {
 		try {
 			this.pessoas.salvar(this.pessoa);
-
+			
 			this.todasPessoas = this.pessoas.todas();
 			this.pessoa = new Pessoa();
 
@@ -62,6 +64,10 @@ public class PessoaBean implements Serializable {
 		}
 	}
 	
+	public void mundarTipoManga() {
+		this.todasPessoas = this.pessoas.todosPorTipo(this.tipoSelecionado);
+	}
+	
 	public Pessoa getPessoa() {
 		return pessoa;
 	}
@@ -78,6 +84,14 @@ public class PessoaBean implements Serializable {
 		this.pessoaSelecionada = pessoaSelecionada;
 	}
 
+	public TipoPessoa getTipoSelecionado() {
+		return tipoSelecionado;
+	}
+	
+	public void setTipoSelecionado(TipoPessoa tipoSelecionado) {
+		this.tipoSelecionado = tipoSelecionado;
+	}
+	
 	public List<Pessoa> getTodasPessoas() {
 		return todasPessoas;
 	}
