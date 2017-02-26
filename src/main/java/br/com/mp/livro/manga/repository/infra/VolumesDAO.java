@@ -35,10 +35,9 @@ public class VolumesDAO implements Volumes, Serializable {
 		TypedQuery<Volume> query = this.manager
 					.createQuery("SELECT v FROM Volume v "
 							+ "JOIN FETCH v.artista "
-							+ "JOIN FETCH v.capista "
+							+ "LEFT JOIN FETCH v.capista "
 							+ "LEFT JOIN FETCH v.editor "
 							+ "JOIN FETCH v.manga "
-							//+ "LEFT OUTER JOIN FETCH v.capitulos "
 							+ "WHERE v.manga = :manga "
 							+ "ORDER BY v.dataPublicacao", Volume.class);
 		query.setParameter("manga", manga);

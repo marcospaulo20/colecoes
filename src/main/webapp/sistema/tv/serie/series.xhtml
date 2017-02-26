@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<ui:composition template="../../../WEB-INF/template/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:define name="titulo">Series</ui:define>
+
+	<ui:define name="corpo">
+		<h:form id="formSerie">
+			<p:panel id="panelSerie" header="Serie" style="margin-bottom:20px">
+				
+				<f:facet name="actions">
+					<p:commandButton value="Adicionar" icon="ui-icon-plus" actionListener="#{serieBean.prepararCadastro}"
+						oncomplete="PF('dlgCadastro').show();" update="formCadastro" style="float:right">
+						<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+					</p:commandButton>
+					
+					<h:panelGrid>
+						<p:selectOneButton value="#{serieBean.tipoCategoriaSelecionado}">
+				            <f:selectItems value="#{serieBean.todosTiposCategorias}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+				            <p:ajax event="change" listener="#{serieBean.mundarTipoSerie}" update=":formSerie:tabelaSerie" />
+				        </p:selectOneButton>
+			        </h:panelGrid>
+				</f:facet>
+				
+				<p:dataTable id="tabelaSerie" value="#{serieBean.todasSeries}" var="serie" widgetVar="tabelaSerie"
+					paginator="true" rows="5" paginatorPosition="bottom"
+					emptyMessage="Nenhum titulo foi encontrado.">
+					<f:facet name="header">
+				        Lista de series
+				    </f:facet>
+					<p:column headerText="Nome" filterBy="#{serie.nomeOriginal}" filterMatchMode="contains">
+						<h:link outcome="temporadas">
+							<h:outputLabel value="#{serie.nomeOriginal}" />
+							<f:param name="id" value="#{serie.id}"/>
+						</h:link>
+					</p:column>
+					<p:column headerText="Ano" sortBy="#{serie.anoLancamento}" styleClass="data">
+						<h:outputLabel value="#{serie.anoLancamento}" />
+					</p:column>
+					
+					<p:column headerText="País" sortBy="#{serie.paisOrigem}">
+						<h:outputLabel value="#{serie.paisOrigem}" />
+					</p:column>
+					
+					<p:column headerText="Emissora" sortBy="#{serie.emissora}">
+						<h:outputLabel value="#{serie.emissora}" />
+					</p:column>
+					
+					<p:column headerText="Classificação" sortBy="#{serie.classificacao}">
+						<h:outputLabel value="#{serie.classificacao.descricao}" />
+					</p:column>
+					
+					<p:column headerText="Nº temporadas" styleClass="numero">
+						<h:outputLabel value="#{serie.listaTemporada.size()}" />
+					</p:column>
+					<p:column headerText="Ações" style="width: 100px; text-align: center;">
+						<p:commandButton icon="ui-icon-pencil" oncomplete="PF('dlgCadastro').show();" update="formCadastro">
+							<f:setPropertyActionListener value="#{serie}" target="#{serieBean.serie}" />
+							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
+						
+						<p:commandButton icon="ui-icon-trash" update="@form" process="@this" action="#{serieBean.excluir()}">
+							<p:confirm header="Excluir" message="Confirma exclus&#227;o desta serie?" icon="ui-icon-alert" />
+							<f:setPropertyActionListener value="#{serie}" target="#{serieBean.serieSelecionada}" />
+						</p:commandButton>
+					</p:column>
+					
+					<f:facet name="footer">
+				        No total h&#225; #{fn:length(serieBean.todasSeries)} series.
+				    </f:facet>
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+		
+		<p:dialog id="dlgCadastro" widgetVar="dlgCadastro" header="Titulo - Cadastro"
+			modal="true" resizable="false" responsive="true">
+			<h:form id="formCadastro">
+				<h:panelGrid columns="2">
+					<p:outputLabel for="nomeOriginal" value="Nome original" />
+					<p:inputText id="nomeOriginal" value="#{serieBean.serie.nomeOriginal}" size="20"
+						required="true" requiredMessage="O campo 'Nome original' é obrigatorio." />
+					
+					<p:outputLabel for="nomeNacional" value="Nome nacional" />
+					<p:inputText id="nomeNacional" value="#{serieBean.serie.nomeNacional}" size="20"
+						required="true" requiredMessage="O campo 'Nome nacional' é obrigatorio." />
+					
+					<p:outputLabel for="ano" value="Ano lançamento:" />
+					<p:inputText id="ano" value="#{serieBean.serie.anoLancamento}" size="5"
+						required="true" requiredMessage="O campo 'Ano lançamento' é obrigatorio." />
+						
+					<p:outputLabel for="paisOrigem" value="País:" />
+			        <p:selectOneMenu id="paisOrigem" value="#{serieBean.serie.paisOrigem}"
+			        	filter="true" filterMatchMode="contains" autoWidth="false" style="width: 120px"
+			        	required="true" requiredMessage="O campo 'País' é obrigatorio.">
+			            <f:selectItem itemLabel="Selecione um País" itemValue="" />
+			            <f:selectItem itemLabel="Brasil" itemValue="Brasil" />
+			            <f:selectItem itemLabel="Estados Unidos" itemValue="Estados Unidos" />
+			            <f:selectItem itemLabel="Italia" itemValue="Italia" />
+			            <f:selectItem itemLabel="Japão" itemValue="Japão" />
+			            <f:selectItem itemLabel="Reino Unido" itemValue="Reino Unido" />
+			        </p:selectOneMenu>
+			        
+			        <p:outputLabel for="classificacao" value="Classificação:" />
+			        <p:selectOneMenu id="classificacao" value="#{serieBean.serie.classificacao}" 
+			        	required="true" requiredMessage="O campo 'Classificação' é obrigatorio.">
+			            <f:selectItems value="#{serieBean.todasClassificacoes}" var="classificacao" itemValue="#{classificacao}" itemLabel="#{classificacao.descricao}" />
+			        </p:selectOneMenu>
+			        
+			        <p:outputLabel for="emissora" value="Emissora" />
+			        <p:selectOneMenu id="emissora" value="#{serieBean.serie.emissora}" 
+			        	required="true" requiredMessage="O campo 'Emissora' é obrigatorio.">
+			            <f:selectItems value="#{serieBean.todasEmissoras}" var="emissora" itemValue="#{emissora}" itemLabel="#{emissora.descricao}" />
+			        </p:selectOneMenu>
+			        
+			        <p:outputLabel for="tipoCategoria" value="Tipo categoria:" />
+			        <p:selectOneMenu id="tipoCategoria" value="#{serieBean.serie.tipoCategoria}" 
+			        	required="true" requiredMessage="O campo 'Tipo categoria' é obrigatorio.">
+			            <f:selectItems value="#{serieBean.todosTiposCategorias}" var="tipoCategoria" itemValue="#{tipoCategoria}" itemLabel="#{tipoCategoria.descricao}" />
+			        </p:selectOneMenu>
+			        
+			        <p:outputLabel for="sinopse" value="Sinopse:" />
+			        <p:inputTextarea id="sinopse" rows="10" cols="50" value="#{serieBean.serie.sinopse}" />
+				</h:panelGrid>
+				
+			    <p:commandButton value="Salvar" action="#{serieBean.salvar()}" update=":formCadastro :formSerie:panelSerie" /> 
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

@@ -45,7 +45,7 @@ public class EdicaoBean implements Serializable {
 	public void init() {
 		this.edicao = new Edicao();
 		this.todosEdicoes = new ArrayList<Edicao>();
-		this.carregarListaEdicaos();
+		this.carregarListaEdicoes();
 	}
 
 	public void prepararCadastro() {
@@ -61,7 +61,7 @@ public class EdicaoBean implements Serializable {
 		this.todosEditores = pessoas.todasPorTipo(TipoPessoa.EDITOR);
 	}
 
-	private void carregarListaEdicaos() {
+	private void carregarListaEdicoes() {
 		if (this.isNuloHQ())
 			this.todosEdicoes = edicoes.todosPorHQ(this.hq);
 	}
@@ -82,7 +82,7 @@ public class EdicaoBean implements Serializable {
 		try {
 			this.edicoes.salvar(this.edicao);
 
-			this.carregarListaEdicaos();
+			this.carregarListaEdicoes();
 			this.edicao = new Edicao();
 			this.edicao.setHq(this.hq);
 
@@ -96,7 +96,7 @@ public class EdicaoBean implements Serializable {
 	public void excluir() {
 		try {
 			this.edicoes.remover(this.edicaoSelecionado);
-			this.carregarListaEdicaos();
+			this.carregarListaEdicoes();
 			Messages.addFlashGlobalInfo("Edicao excluido com sucesso!");
 		} catch (RegraNegocioException e) {
 			e.printStackTrace();
@@ -175,5 +175,33 @@ public class EdicaoBean implements Serializable {
 
 	public List<Pessoa> getTodosEscritores() {
 		return todosEscritores;
+	}
+	
+	public String quantidadeTotalEdicoesTem() {
+		this.carregarListaEdicoes();
+		long totalTem = 0, total = 0;
+		
+		if(this.todosEdicoes.size() > 0) {
+			total = this.todosEdicoes.stream().count();
+			for(Edicao edicao : this.todosEdicoes)
+				if(edicao.isTem() == true)
+					totalTem += 1;
+		}		
+		
+		return totalTem + " / " + total;
+	}
+	
+	public String quantidadeTotalEdicoesLeu() {
+		this.carregarListaEdicoes();
+		long totalTem = 0, total = 0;
+		
+		if(this.todosEdicoes.size() > 0) {
+			total = this.todosEdicoes.stream().count();
+			for(Edicao edicao : this.todosEdicoes)
+				if(edicao.isLeu() == true)
+					totalTem += 1;
+		}		
+		
+		return totalTem + " / " + total;
 	}
 }

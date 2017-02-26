@@ -33,6 +33,13 @@
 					</p:commandButton>
 				</f:facet>
 				
+				<p:panel id="panelTotalEdicao">
+					<h:panelGrid >
+						<h:outputText value="Total edições tenho: #{edicaoBean.quantidadeTotalEdicoesTem()}" />
+						<h:outputText value="Total edições leu: #{edicaoBean.quantidadeTotalEdicoesLeu()}" />
+					</h:panelGrid>
+				</p:panel>	
+				
 				<p:dataTable id="tabelaEdicao" value="#{edicaoBean.todosEdicoes}" var="edicao" widgetVar="tabelaEdicao"
 					paginator="true" rows="2" paginatorPosition="bottom"
 					emptyMessage="Nenhum edicao foi encontrado.">
@@ -40,7 +47,7 @@
 						Lista de edições
 					</f:facet>
 
-					<p:column headerText="Capa">
+					<p:column headerText="Capa" styleClass="imagem">
 						<o:graphicImage value="#{imagensEdicoesGraphicBean.get(edicao.id)}" 
 							lastModified="#{imagensEdicoesBean.ultimaModificaoFoto(edicao)}" height="150" />
 					</p:column>

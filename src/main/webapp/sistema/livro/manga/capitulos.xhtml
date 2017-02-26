@@ -21,24 +21,24 @@
 				<f:facet name="header">
 			        Lista de capitulos
 			    </f:facet>
-			     <p:column headerText="Número" filterBy="#{capitulo.numero}" filterMatchMode="contains">
+			     <p:column headerText="Número" filterBy="#{capitulo.numero}" filterMatchMode="contains" styleClass="numero">
 					<h:outputLabel value="#{capitulo.numero}" />
 				</p:column>
 			    <p:column headerText="Nome" filterBy="#{capitulo.nome}" filterMatchMode="contains">
 					<h:outputLabel value="#{capitulo.nome}" />
 				</p:column>
 				
-				<p:column headerText="Tem">
+				<p:column headerText="Tem" styleClass="check">
 					<p:selectBooleanCheckbox value="#{capitulo.tem}">
 						<p:ajax partialSubmit="true" resetValues="true"
-							listener="#{capituloBean.atualizarCapituloIsTem(capitulo, capitulo.tem)}" update="formCapitulo" />
+							listener="#{capituloBean.atualizarCapituloIsTem(capitulo, capitulo.tem)}" update="formCapitulo :formVolume:panelVolume" />
 					</p:selectBooleanCheckbox>						
 				</p:column>
 				
-				<p:column headerText="Leu">
+				<p:column headerText="Leu" styleClass="check">
 					<p:selectBooleanCheckbox value="#{capitulo.leu}">
 						<p:ajax partialSubmit="true" resetValues="true"
-							listener="#{capituloBean.atualizarCapituloIsLeu(capitulo, capitulo.leu)}" update="formCapitulo" />
+							listener="#{capituloBean.atualizarCapituloIsLeu(capitulo, capitulo.leu)}" update="formCapitulo :formVolume:panelVolume" />
 					</p:selectBooleanCheckbox>						
 				</p:column>
 				

@@ -59,7 +59,8 @@ public class CapituloBean implements Serializable {
 			this.todosCapitulos = capitulos.todosPorVolume(this.volume);
 			this.capitulo = new Capitulo();
 			this.capitulo.setVolume(this.volume);
-			this.quantidadeTotalCapitulos();
+			this.quantidadeTotalCapitulosTem();
+			this.quantidadeTotalCapitulosLeu();
 
 			Messages.addFlashGlobalInfo("O capitulo foi salvo com sucesso!");
 		} catch (RegraNegocioException e) {
@@ -72,7 +73,8 @@ public class CapituloBean implements Serializable {
 		try {
 			this.capitulos.remover(this.capituloSelecionado);
 			this.todosCapitulos = capitulos.todosPorVolume(this.volume);
-			this.quantidadeTotalCapitulos();
+			this.quantidadeTotalCapitulosTem();
+			this.quantidadeTotalCapitulosLeu();
 			
 			Messages.addFlashGlobalInfo("Capitulo excluido com sucesso!");
 		} catch (RegraNegocioException e) {
@@ -140,11 +142,33 @@ public class CapituloBean implements Serializable {
 		return todosCapitulos;
 	}
 	
-	public long quantidadeTotalCapitulos() {
+	public String quantidadeTotalCapitulosTem() {
 		Manga manga = this.volumeBean.getManga();
 		List<Capitulo> listaCapitulos = this.capitulos.todosCapitulosPorManga(manga);
-		if(listaCapitulos.size() > 0) 
-			return listaCapitulos.stream().count();
-		return 0;
+		long totalTem = 0, total = 0;
+		
+		if(listaCapitulos.size() > 0) { 
+			total = listaCapitulos.stream().count();
+			for(Capitulo capitulo : listaCapitulos)
+				if(capitulo.isTem() == true)
+					totalTem += 1;
+		}
+		
+		return totalTem + " / " + total;
+	}
+	
+	public String quantidadeTotalCapitulosLeu() {
+		Manga manga = this.volumeBean.getManga();
+		List<Capitulo> listaCapitulos = this.capitulos.todosCapitulosPorManga(manga);
+		long totalTem = 0, total = 0;
+		
+		if(listaCapitulos.size() > 0) { 
+			total = listaCapitulos.stream().count();
+			for(Capitulo capitulo : listaCapitulos)
+				if(capitulo.isLeu() == true)
+					totalTem += 1;
+		}
+		
+		return totalTem + " / " + total;
 	}
 }

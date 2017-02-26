@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<ui:composition
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="formEpisodio">
+		<p:panel id="panelEpisodio" header="Episodios" style="margin-bottom:20px" rendered="#{episodioBean.nuloTemporada}">
+			<f:facet name="actions">
+				<p:commandButton value="Adicionar" icon="ui-icon-plus" action="#{episodioBean.prepararCadastro}"
+					oncomplete="PF('dlgCadastroEpisodio').show();" update="formCadastroEpisodio" style="float:right">
+					<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+				</p:commandButton>
+			</f:facet>
+			
+			<p:dataTable id="tabelaEpisodio" value="#{episodioBean.todosEpisodios}" var="episodio" widgetVar="tabelaEpisodio"
+				paginator="true" rows="5" paginatorPosition="bottom"
+				emptyMessage="Nenhum episodio foi encontrado.">
+				<f:facet name="header">
+			        Lista de episodios
+			    </f:facet>
+			     <p:column headerText="Número" filterBy="#{episodio.numero}" filterMatchMode="contains" styleClass="numero">
+					<h:outputLabel value="#{episodio.numero}" />
+				</p:column>
+			    <p:column headerText="Nome" filterBy="#{episodio.nome}" filterMatchMode="contains">
+					<h:outputLabel value="#{episodio.nome}" />
+				</p:column>
+				
+				<p:column headerText="Tem" styleClass="check">
+					<p:selectBooleanCheckbox value="#{episodio.tem}">
+						<p:ajax partialSubmit="true" resetValues="true"
+							listener="#{episodioBean.atualizarEpisodioIsTem(episodio, episodio.tem)}" update="formEpisodio :formTemporada:panelTemporada" />
+					</p:selectBooleanCheckbox>						
+				</p:column>
+				
+				<p:column headerText="Ass." styleClass="check">
+					<p:selectBooleanCheckbox value="#{episodio.assistir}">
+						<p:ajax partialSubmit="true" resetValues="true"
+							listener="#{episodioBean.atualizarEpisodioIsAssistir(episodio, episodio.assistir)}" update="formEpisodio :formTemporada:panelTemporada" />
+					</p:selectBooleanCheckbox>						
+				</p:column>
+				
+				<p:column headerText="Ações" style="width: 100px; text-align: center;">
+					<p:commandButton icon="ui-icon-pencil" oncomplete="PF('dlgCadastroEpisodio').show();"
+						actionListener="#{volumeBean.carregarListas}" update="formCadastroEpisodio">
+						<f:setPropertyActionListener value="#{episodio}" target="#{episodioBean.episodio}" />
+						<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+					</p:commandButton>
+					
+					<p:commandButton icon="ui-icon-trash" update="formEpisodio :formTemporada:panelTemporada" process="@this" action="#{episodioBean.excluir()}">
+						<p:confirm header="Excluir" message="Confirma exclus&#227;o deste episodio?" icon="ui-icon-alert" />
+						<f:setPropertyActionListener value="#{episodio}" target="#{episodioBean.episodioSelecionado}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+	</h:form>
+	
+	<p:dialog id="dlgCadastroEpisodio" widgetVar="dlgCadastroEpisodio" header="Episodio - Cadastro"
+		modal="true" resizable="false" responsive="true">
+		<h:form id="formCadastroEpisodio">
+			<h:panelGrid columns="2">
+				<p:outputLabel for="numero_e" value="Número:" />
+				<p:inputText id="numero_e" value="#{episodioBean.episodio.numero}" size="5" maxlength="6"
+					required="true" requiredMessage="O campo 'Número' é obrigatorio." />
+				
+				<p:outputLabel for="nome_e" value="Nome:" />
+				<p:inputText id="nome_e" value="#{episodioBean.episodio.nome}" size="20"
+					required="true" requiredMessage="O campo 'Nome' é obrigatorio." />
+				
+				<p:outputLabel for="dataExibicao" value="Data de exibição:" />
+				<p:calendar id="dataExibicao" size="12" pattern="dd/MM/yyyy" 
+					value="#{episodioBean.episodio.dataExibicao}" />
+				
+				<p:outputLabel for="diretor" value="Diretor:" />
+		        <p:selectOneMenu id="diretor" value="#{episodioBean.episodio.diretor}"
+		        	filter="true" filterMatchMode="contains" autoWidth="false" style="width: 120px">
+		            <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+		            <f:selectItems value="#{episodioBean.todosDiretores}" var="diretor" itemValue="#{diretor}" itemLabel="#{diretor.nome}" />
+		        </p:selectOneMenu>
+				
+				<p:outputLabel for="assistir" value="Assistir:" />
+				<p:selectBooleanCheckbox id="assistir" value="#{episodioBean.episodio.assistir}" />
+				
+				<p:outputLabel for="tem_e" value="Tem:" />
+				<p:selectBooleanCheckbox id="tem_e" value="#{episodioBean.episodio.tem}" />
+						
+			</h:panelGrid>
+			<p:commandButton value="Salvar" action="#{episodioBean.salvar()}" update=":formCadastroEpisodio :formEpisodio :formTemporada:panelTemporada" />
+		</h:form>
+	</p:dialog>				
+</ui:composition>		

@@ -1,4 +1,4 @@
-package br.com.mp.livro.manga.view;
+package br.com.mp.tv.serie.view;
 
 import java.io.IOException;
 
@@ -8,17 +8,17 @@ import org.omnifaces.cdi.GraphicImageBean;
 import org.omnifaces.util.Faces;
 import org.omnifaces.util.Utils;
 
-import br.com.mp.livro.manga.repository.ImagensVolumes;
+import br.com.mp.tv.serie.repository.ImagensSeries;
 
 @GraphicImageBean
-public class ImagensVolumesGraphicBean {
+public class ImagensSerieGraphicBean {
 
 	@Inject
-	private ImagensVolumes imagensVolumes;
+	private ImagensSeries imagensSeries;
 	
 	public byte[] get(Long id) throws IOException {
 		try {
-			return imagensVolumes.porVolume(id).getImagem();
+			return imagensSeries.porSerie(id).getImagem();
 		} catch(Exception e) {
 			return Utils.toByteArray(Faces.getResourceAsStream("/resources/imagens/image-default.jpg"));
 		}

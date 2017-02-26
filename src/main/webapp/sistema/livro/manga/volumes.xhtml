@@ -33,8 +33,12 @@
 					</p:commandButton>
 				</f:facet>
 				
-				<p:panel id="panelTotalCapitulo">				
-					<h:outputText value="Total capitulos: #{capituloBean.quantidadeTotalCapitulos()}" />
+				<p:panel id="panelTotalCapitulo">
+					<h:panelGrid >
+						<h:outputText value="Total volumes: #{volumeBean.quantidadeTotalVolumes()}" />
+						<h:outputText value="Total capitulos tenho: #{capituloBean.quantidadeTotalCapitulosTem()}" rendered="#{!volumeBean.mangaFisico}" />
+						<h:outputText value="Total capitulos leu: #{capituloBean.quantidadeTotalCapitulosLeu()}" rendered="#{!volumeBean.mangaFisico}" />
+					</h:panelGrid>
 					<h:panelGrid rendered="#{volumeBean.mangaFisico}">
 						<h:outputText value="#{volumeBean.precoTotal()}">
 							<f:convertNumber type="currency" currencySymbol="R$" />
@@ -55,7 +59,7 @@
 
 					<p:ajax event="rowSelect" listener="#{volumeBean.onRowSelect}" update="formCapitulo" />
 					
-					<p:column headerText="Capa">
+					<p:column headerText="Capa" styleClass="imagem">
 						<o:graphicImage value="#{imagensVolumesGraphicBean.get(volume.id)}" 
 							lastModified="#{imagensVolumesBean.ultimaModificaoFoto(volume)}" height="150" width="100" />
 					</p:column>
@@ -78,7 +82,7 @@
 					
 					<p:column headerText="Tem" styleClass="check">
 						<p:selectBooleanCheckbox value="#{volume.tem}">
-							<p:ajax partialSubmit="true" resetValues="true" listener="#{volumeBean.atualizarVolume(volume, volume.tem)}" update="formVolume" />
+							<p:ajax partialSubmit="true" resetValues="true" listener="#{volumeBean.atualizarVolume(volume, volume.tem)}" update="formVolume:panelVolume" />
 						</p:selectBooleanCheckbox>						
 					</p:column>									
 					

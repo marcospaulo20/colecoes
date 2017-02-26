@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<ui:composition template="../../../WEB-INF/template/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="titulo">Posters das Series</ui:define>
+
+	<ui:define name="corpo">
+		<h:form id="formSerie">
+			<p:panel id="panelCapasSerie" header="Capas de series" style="margin-bottom:20px">
+				
+				<f:facet name="actions">
+					<p:selectOneButton value="#{imagensSerieBean.tipoCategoriaSelecionado}">
+			            <f:selectItems value="#{imagensSerieBean.todosTipoCategorias}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+			            <p:ajax event="change" listener="#{imagensSerieBean.mundarTipoSerie}" update=":formSerie" />
+			        </p:selectOneButton>					
+				</f:facet>
+				
+				<p:dataGrid id="gridSerie" value="#{imagensSerieBean.todasSeries}" var="serie" columns="3" layout="grid"
+			        rows="12" paginator="true"
+			        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			        rowsPerPageTemplate="6,12,16"
+			        emptyMessage="Nenhum serie foi encontrado.">
+			        
+			        <p:panel header="#{serie.nomeOriginal}" style="text-align:center">
+			            <h:panelGrid columns="1" style="width:100%">
+			                <p:commandLink update="formImagensSeries" oncomplete="PF('dlgImagensSeries').show()">
+			                	<o:graphicImage value="#{imagensSerieGraphicBean.get(serie.id)}" 
+									lastModified="#{imagensSerieBean.ultimaModificaoFoto(serie)}" height="180" />
+								<f:setPropertyActionListener value="#{serie}" target="#{imagensSerieBean.serieSelecionado}" />
+							</p:commandLink>
+							
+			                <h:outputText value="#{serie.anoLancamento}" />
+			            </h:panelGrid>
+			        </p:panel>
+				</p:dataGrid>				
+			</p:panel>
+		</h:form>
+
+		<p:dialog id="dlgImagensSeries" widgetVar="dlgImagensSeries" header="Capa de Series - Upload"
+			modal="true" resizable="false" responsive="true">
+			<h:form id="formImagensSeries">
+				<p:panel id="panelImagemSerie">
+					<h:panelGrid columns="2">
+						<p:outputLabel for="nome" value="Nome:" />
+						<p:inputText id="nome" value="#{imagensSerieBean.serieSelecionado.nomeOriginal}" disabled="true" size="32" />
+					</h:panelGrid>
+					<h:panelGrid columns="1">
+						<p:fileUpload fileUploadListener="#{imagensSerieBean.salvar}" mode="advanced" dragDropSupport="false"
+           					sizeLimit="1000000" fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+					</h:panelGrid>												
+				</p:panel>
+			</h:form>
+		</p:dialog>	
+        
+	</ui:define>
+</ui:composition>

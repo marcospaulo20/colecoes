@@ -72,7 +72,7 @@ public class MangaBean implements Serializable {
 		this.todosMangas = this.mangas.todosPorTipo(this.tipoSelecionado);
 	}
 	
-	public void tipoModificadao(AjaxBehaviorEvent event) {		
+	public void tipoModificadao(AjaxBehaviorEvent event) {
 		if(this.manga.getTipo().equals(Tipo.FISICO)) {
 			isFisico = true;
 		} else {

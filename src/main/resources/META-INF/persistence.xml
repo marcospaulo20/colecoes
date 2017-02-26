@@ -8,6 +8,7 @@
 		<class>br.com.mp.model.Usuario</class>
 		<class>br.com.mp.model.Pessoa</class>
 		
+		<!-- Livro -->
 		<class>br.com.mp.livro.model.Editora</class>
 		<class>br.com.mp.livro.manga.model.Manga</class>
 		<class>br.com.mp.livro.manga.model.Volume</class>
@@ -17,6 +18,12 @@
 		<class>br.com.mp.livro.hq.model.Edicao</class>
 		<class>br.com.mp.livro.hq.model.ImagemEdicoes</class>
 		<class>br.com.mp.livro.hq.model.TituloHQ</class>
+		
+		<!-- Tv -->
+		<class>br.com.mp.tv.serie.model.Serie</class>
+		<class>br.com.mp.tv.serie.model.Temporada</class>
+		<class>br.com.mp.tv.serie.model.Episodio</class>
+		<class>br.com.mp.tv.serie.model.ImagemSerie</class>
 		
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />

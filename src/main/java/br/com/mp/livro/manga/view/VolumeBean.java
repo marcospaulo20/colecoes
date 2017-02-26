@@ -11,7 +11,6 @@ import javax.inject.Named;
 
 import org.omnifaces.util.Messages;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.event.UnselectEvent;
 
 import br.com.mp.livro.manga.model.Manga;
 import br.com.mp.livro.manga.model.Volume;
@@ -127,10 +126,6 @@ public class VolumeBean implements Serializable {
         Volume volume = (Volume) event.getObject();
         this.capituloBean.setVolume(volume);
     }
- 
-    public void onRowUnselect(UnselectEvent event) {
-    	
-    }
 	
 	public Volume getVolume() {
 		return volume;
@@ -184,7 +179,7 @@ public class VolumeBean implements Serializable {
 		return 0.0;
 	}
 	
-	public Double precoTotalFatam() {
+	public double precoTotalFatam() {
 		if(this.isMangaFisico()) {
 			if(this.todosVolumes.size() > 0) {
 				double somaTotal = 0.0;
@@ -195,6 +190,21 @@ public class VolumeBean implements Serializable {
 			}
 		}
 		return 0.0;
+	}
+	
+	public String quantidadeTotalVolumes() {
+		long total = 0, totalTem = 0;
+		this.carregarListaVolumes();
+		
+		if(this.todosVolumes.size() > 0) {
+			total = this.todosVolumes.stream().count();
+			
+			for(Volume volume : this.todosVolumes)
+				if(volume.isTem() == true)
+					totalTem += 1;
+		}
+		
+		return totalTem + " / " + total;
 	}
 	
 }

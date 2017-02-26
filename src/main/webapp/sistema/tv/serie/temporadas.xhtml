@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<ui:composition template="../../../WEB-INF/template/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:define name="titulo">Temporadas</ui:define>
+
+	<f:metadata>
+		<f:viewParam name="id" value="#{temporadaBean.serie}"/>
+		<f:viewAction action="#{temporadaBean.init}" />
+	</f:metadata>
+	
+	<ui:define name="corpo">
+		<h:form id="formTemporada">
+			<p:panel>
+		    	<p:breadCrumb>
+				    <p:menuitem url="/home.xhtml" />
+				    <p:menuitem value="Titulos" url="/sistema/tv/serie/series.xhtml" />
+				</p:breadCrumb>
+		    </p:panel>
+		
+			<p:panel id="panelTemporada" header="#{temporadaBean.serie.nomeOriginal} - Temporadas" style="margin-bottom:20px">
+				
+				<f:facet name="actions">
+					<p:commandButton value="Adicionar" icon="ui-icon-plus" actionListener="#{temporadaBean.prepararCadastro}"
+						oncomplete="PF('dlgCadastro').show();" update="formCadastro" style="float:right">
+						<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+					</p:commandButton>
+				</f:facet>
+				
+				<p:panel id="panelTotalEpisodio">
+					<h:panelGrid >
+						<h:outputText value="Total temporadas: #{temporadaBean.quantidadeTotalTemporadas()}" />
+						<h:outputText value="Total de episodios assistir: #{episodioBean.quantidadeTotalEpisodiosAssistir()}" />
+						<h:outputText value="Total de episodios tem: #{episodioBean.quantidadeTotalEpisodiosTem()}" />
+					</h:panelGrid>					
+				</p:panel>
+				
+				<h:panelGrid columns="2">
+					<p:panel>
+						<o:graphicImage value="#{imagensSerieGraphicBean.get(temporadaBean.serie.id)}" 
+							lastModified="#{imagensSerieBean.ultimaModificaoFoto(temporadaBean.serie)}" height="210" />
+					</p:panel>
+					
+					<p:dataTable id="tabelaTemporada" value="#{temporadaBean.todasTemporadas}" var="temporada" widgetVar="tabelaTemporada"
+						paginator="true" rows="3" paginatorPosition="bottom"
+						selectionMode="single" selection="#{temporadaBean.temporadaSelecionada}" rowKey="#{temporada.id}"
+						emptyMessage="Nenhum temporada foi encontrado.">
+						<f:facet name="header">
+							Lista de temporadas
+						</f:facet>
+	
+						<p:ajax event="rowSelect" listener="#{temporadaBean.onRowSelect}" update="formEpisodio" />
+						
+						<p:column headerText="Nome" filterBy="#{temporada.nome}" filterMatchMode="contains">
+							<h:outputLabel value="#{temporada.nome}" />
+						</p:column>
+						
+						<p:column headerText="Ano" styleClass="data">
+							<h:outputText value="#{temporada.anoLancamento}" />
+						</p:column>
+						
+						<p:column headerText="Tem" styleClass="check">
+							<p:selectBooleanCheckbox value="#{temporada.tem}">
+								<p:ajax partialSubmit="true" resetValues="true" listener="#{temporadaBean.atualizarTemporada(temporada, temporada.tem)}" update="formTemporada:panelTemporada" />
+							</p:selectBooleanCheckbox>						
+						</p:column>									
+						
+						<p:column headerText="Ações" style="width: 100px; text-align: center;">
+							<p:commandButton icon="ui-icon-pencil" oncomplete="PF('dlgCadastro').show();" update="formCadastro">
+								<f:setPropertyActionListener value="#{temporada}" target="#{temporadaBean.temporada}" />
+								<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+							</p:commandButton>
+							
+							<p:commandButton icon="ui-icon-trash" update="@form" process="@this" action="#{temporadaBean.excluir()}">
+								<p:confirm header="Excluir" message="Confirma exclus&#227;o desta temporada?" icon="ui-icon-alert" />
+								<f:setPropertyActionListener value="#{temporada}" target="#{temporadaBean.temporadaSelecionada}" />
+							</p:commandButton>
+						</p:column>
+						
+						<f:facet name="footer">
+				        	No total h&#225; #{fn:length(temporadaBean.todasTemporadas)} temporadas.
+				    	</f:facet>
+					</p:dataTable>
+				</h:panelGrid>			
+			</p:panel>
+		</h:form>
+		
+		<div>
+			<ui:include src="/sistema/tv/serie/episodios.xhtml" />
+		</div>
+		
+		<p:dialog id="dlgCadastro" widgetVar="dlgCadastro" header="Temporada - Cadastro"
+			modal="true" resizable="false" responsive="true">
+			<h:form id="formCadastro">
+				<h:panelGrid columns="2">
+					<p:outputLabel for="nome" value="Nome:" />
+					<p:inputText id="nome" value="#{temporadaBean.temporada.nome}" size="20"
+						required="true" requiredMessage="O campo 'Nome' é obrigatorio." />
+					
+					<p:outputLabel for="ano" value="Ano lançamento:" />
+					<p:inputText id="ano" value="#{temporadaBean.temporada.anoLancamento}" size="5"
+						required="true" requiredMessage="O campo 'Ano lançamento' é obrigatorio." />
+					
+			        <p:outputLabel for="tem" value="Tem:" />
+					<p:selectBooleanCheckbox id="tem" value="#{temporadaBean.temporada.tem}" />
+				</h:panelGrid>
+				<p:commandButton value="Salvar" action="#{temporadaBean.salvar()}" update=":formCadastro :formTemporada:panelTemporada" /> 
+			</h:form>
+		</p:dialog>	
+	</ui:define>
+</ui:composition>
