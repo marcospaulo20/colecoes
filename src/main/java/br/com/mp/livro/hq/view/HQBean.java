@@ -12,6 +12,7 @@ import javax.inject.Named;
 
 import org.omnifaces.util.Messages;
 
+import br.com.mp.livro.hq.model.Edicao;
 import br.com.mp.livro.hq.model.HQ;
 import br.com.mp.livro.hq.repository.HQs;
 import br.com.mp.livro.model.Categoria;
@@ -144,5 +145,18 @@ public class HQBean implements Serializable {
 	
 	public Categoria[] getTodasCategorias() {
 		return Categoria.values();
+	}
+	
+	public String quantidadeTotalEdicoesTem(List<Edicao> listaEdicoes) {
+		long totalTem = 0, total = 0;
+		
+		if(listaEdicoes.size() > 0) {
+			total = listaEdicoes.stream().count();
+			for(Edicao edicao : listaEdicoes)
+				if(edicao.isTem() == true)
+					totalTem += 1;
+		}		
+		
+		return totalTem + " / " + total;
 	}
 }

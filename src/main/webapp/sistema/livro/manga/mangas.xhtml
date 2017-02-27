@@ -29,7 +29,7 @@
 					paginator="true" rows="10" paginatorPosition="bottom"
 					emptyMessage="Nenhum titulo foi encontrado.">
 					<f:facet name="header">
-				        Lista de Titulos
+				        Lista de titulos
 				    </f:facet>
 					<p:column headerText="Nome" filterBy="#{manga.nome}" filterMatchMode="contains">
 						<h:link outcome="volumes">
@@ -50,7 +50,7 @@
 						<h:outputLabel value="#{manga.status.descricao}" />
 					</p:column>
 					<p:column headerText="Nº volumes" styleClass="numero">
-						<h:outputLabel value="#{manga.volumes.size()}" />
+						<h:outputLabel value="#{mangaBean.quantidadeTotalVolumes(manga.volumes)}" />
 					</p:column>
 					<p:column headerText="Ações" style="width: 100px; text-align: center;">
 						<p:commandButton icon="ui-icon-pencil" oncomplete="PF('dlgCadastro').show();" 

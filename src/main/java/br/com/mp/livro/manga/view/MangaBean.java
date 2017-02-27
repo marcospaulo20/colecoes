@@ -13,6 +13,7 @@ import javax.inject.Named;
 import org.omnifaces.util.Messages;
 
 import br.com.mp.livro.manga.model.Manga;
+import br.com.mp.livro.manga.model.Volume;
 import br.com.mp.livro.manga.repository.Mangas;
 import br.com.mp.livro.model.Categoria;
 import br.com.mp.livro.model.Editora;
@@ -159,5 +160,18 @@ public class MangaBean implements Serializable {
 	
 	public Categoria[] getTodasCategorias() {
 		return Categoria.values();
+	}
+	
+	public String quantidadeTotalVolumes(List<Volume> listaVolumes) {
+		long total = 0, totalTem = 0;
+		if(listaVolumes.size() > 0) {
+			total = listaVolumes.stream().count();
+			
+			for(Volume volume : listaVolumes)
+				if(volume.isTem() == true)
+					totalTem += 1;
+		}
+		
+		return totalTem + " / " + total;
 	}
 }

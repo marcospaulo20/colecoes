@@ -36,7 +36,7 @@ public class EdicoesDAO implements Edicoes, Serializable {
 					.createQuery("SELECT e FROM Edicao e "
 							+ "JOIN FETCH e.escritor "
 							+ "JOIN FETCH e.artista "
-							+ "JOIN FETCH e.capista "
+							+ "LEFT JOIN FETCH e.capista "
 							+ "LEFT JOIN FETCH e.editor "
 							+ "JOIN FETCH e.hq "
 							+ "WHERE e.hq = :hq "
