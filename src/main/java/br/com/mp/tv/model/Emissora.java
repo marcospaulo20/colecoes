@@ -23,7 +23,8 @@ public enum Emissora {
 	SYFY("Syfy"),
 	TBS("TBS"),
 	TNT("TNT"),
-	USA_NETWORK("USA Network");
+	USA_NETWORK("USA Network"),
+	YOMIURI_TV("Yomiuri TV");
 	
 	private String descricao;
 	

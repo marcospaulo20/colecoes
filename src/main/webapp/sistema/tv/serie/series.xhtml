@@ -24,12 +24,17 @@
 				            <f:selectItems value="#{serieBean.todosTiposCategorias}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
 				            <p:ajax event="change" listener="#{serieBean.mundarTipoSerie}" update=":formSerie:tabelaSerie" />
 				        </p:selectOneButton>
+				        
+				        <p:selectOneButton value="#{serieBean.generoSelecionado}">
+				            <f:selectItems value="#{serieBean.todosGeneros}" var="genero" itemValue="#{genero}" itemLabel="#{genero.descricao}" />
+				            <p:ajax event="change" listener="#{serieBean.mundarGeneroSerie}" update=":formSerie:tabelaSerie" />
+				        </p:selectOneButton>
 			        </h:panelGrid>
 				</f:facet>
 				
 				<p:dataTable id="tabelaSerie" value="#{serieBean.todasSeries}" var="serie" widgetVar="tabelaSerie"
 					paginator="true" rows="5" paginatorPosition="bottom"
-					emptyMessage="Nenhum titulo foi encontrado.">
+					emptyMessage="Nenhuma serie foi encontrada.">
 					<f:facet name="header">
 				        Lista de series
 				    </f:facet>
@@ -48,7 +53,7 @@
 					</p:column>
 					
 					<p:column headerText="Emissora" sortBy="#{serie.emissora}">
-						<h:outputLabel value="#{serie.emissora}" />
+						<h:outputLabel value="#{serie.emissora.descricao}" />
 					</p:column>
 					
 					<p:column headerText="Classificação" sortBy="#{serie.classificacao}">
@@ -56,10 +61,11 @@
 					</p:column>
 					
 					<p:column headerText="Nº temporadas" styleClass="numero">
-						<h:outputLabel value="#{serie.listaTemporada.size()}" />
+						<h:outputLabel value="#{serieBean.quantidadeTotalTemporadas(serie.listaTemporada)}" />
 					</p:column>
 					<p:column headerText="Ações" style="width: 100px; text-align: center;">
-						<p:commandButton icon="ui-icon-pencil" oncomplete="PF('dlgCadastro').show();" update="formCadastro">
+						<p:commandButton icon="ui-icon-pencil" oncomplete="PF('dlgCadastro').show();"
+							action="#{serieBean.atualizarSerie()}" update="formCadastro">
 							<f:setPropertyActionListener value="#{serie}" target="#{serieBean.serie}" />
 							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
 						</p:commandButton>
@@ -122,6 +128,12 @@
 			        	required="true" requiredMessage="O campo 'Tipo categoria' é obrigatorio.">
 			            <f:selectItems value="#{serieBean.todosTiposCategorias}" var="tipoCategoria" itemValue="#{tipoCategoria}" itemLabel="#{tipoCategoria.descricao}" />
 			        </p:selectOneMenu>
+			        
+			         <p:outputLabel for="genero" value="Genero:" />
+			        <p:selectCheckboxMenu id="genero" value="#{serieBean.todosGenerosSelecionado}" label="Generos"
+						filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+			            <f:selectItems value="#{serieBean.todosGeneros}" var="genero" itemValue="#{genero}" itemLabel="#{genero.descricao}" />
+			        </p:selectCheckboxMenu>
 			        
 			        <p:outputLabel for="sinopse" value="Sinopse:" />
 			        <p:inputTextarea id="sinopse" rows="10" cols="50" value="#{serieBean.serie.sinopse}" />

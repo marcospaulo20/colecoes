@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
+import br.com.mp.livro.manga.model.Capitulo;
 import br.com.mp.livro.manga.model.Manga;
 import br.com.mp.livro.manga.model.Volume;
 import br.com.mp.livro.manga.repository.Volumes;
@@ -18,6 +19,8 @@ public class VolumesDAO implements Volumes, Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private EntityManager manager;
+	@Inject
+	private CapitulosDAO capituloDAO;
 	
 	@Inject
 	public VolumesDAO(EntityManager manager) {
@@ -53,6 +56,23 @@ public class VolumesDAO implements Volumes, Serializable {
 	@Transactional
 	public Volume salvar(Volume volume) throws RegraNegocioException {
 		return this.manager.merge(volume);
+	}
+	
+	@Override
+	@Transactional
+	public void salvarVolumeCapitulos(Volume volume) {
+		Volume volumeRetorno = this.manager.merge(volume);
+		
+		if(volumeRetorno.getCapitulos().size() > 0) {
+			for(Capitulo capitulo : volumeRetorno.getCapitulos()) {
+				try {
+					capitulo.setTem(true);
+					capituloDAO.salvar(capitulo);
+				} catch (RegraNegocioException e) {
+					e.printStackTrace();					
+				}
+			}
+		}
 	}
 
 	@Override

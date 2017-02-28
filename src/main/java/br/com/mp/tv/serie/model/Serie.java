@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -58,7 +60,10 @@ public class Serie implements Serializable {
 	@Type(type = "org.hibernate.type.TextType")
 	private String sinopse;
 
-	//private Map<Genero, String> listaGeneros  = new HashMap<>();
+	@ElementCollection(fetch = FetchType.LAZY)
+	@CollectionTable(name = "tb_serie_generos", schema = "tv", joinColumns = @JoinColumn(name = "id"))
+	@Column(name = "genero_nome", nullable = false)
+	private List<String> seriesGeneros;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "serie_id")
@@ -142,6 +147,14 @@ public class Serie implements Serializable {
 
 	public void setListaTemporada(List<Temporada> listaTemporada) {
 		this.listaTemporada = listaTemporada;
+	}
+	
+	public List<String> getSeriesGeneros() {
+		return seriesGeneros;
+	}
+	
+	public void setSeriesGeneros(List<String> seriesGeneros) {
+		this.seriesGeneros = seriesGeneros;
 	}
 
 	@Override

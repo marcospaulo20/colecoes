@@ -62,16 +62,19 @@
 					<p:inputText id="nome" value="#{pessoaBean.pessoa.nome}" size="20"
 						required="true" requiredMessage="O campo 'Nome' é obrigatorio." />
 					
-					<p:outputLabel for="paises" value="Paises:" />
+					<p:outputLabel for="paises" value="País:" />
 			        <p:selectOneMenu id="paises" value="#{pessoaBean.pessoa.paisOrigem}"
 			        	filter="true" filterMatchMode="contains" autoWidth="false" style="width: 120px"
 			        	required="true" requiredMessage="O campo 'Pais de Origem' é obrigatorio.">
 			            <f:selectItem itemLabel="Selecione um País" itemValue="" />
+			            <f:selectItem itemLabel="Australia" itemValue="Australia" />
 			            <f:selectItem itemLabel="Brasil" itemValue="Brasil" />
 			            <f:selectItem itemLabel="Estados Unidos" itemValue="Estados Unidos" />
 			            <f:selectItem itemLabel="Italia" itemValue="Italia" />
 			            <f:selectItem itemLabel="Japão" itemValue="Japão" />
+			            <f:selectItem itemLabel="Noruega" itemValue="Noruega" />
 			            <f:selectItem itemLabel="Reino Unido" itemValue="Reino Unido" />
+			            <f:selectItem itemLabel="Rússia" itemValue="Rússia" />
 			            <f:selectItem itemLabel="Taiwan" itemValue="Taiwan" />
 			        </p:selectOneMenu>
 			        

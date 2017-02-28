@@ -88,12 +88,12 @@ public class TemporadaBean implements Serializable {
 		if(temporada != null) {
 			temporada.setTem(selecionado);
 			try {
-				this.temporadas.salvar(temporada);
+				this.temporadas.salvarTemporadaEpisodios(temporada);
 				
-				Messages.addFlashGlobalInfo("A temporada foi atualizado com sucesso!");
+				Messages.addFlashGlobalInfo("A temporada e episodios foram atualizados com sucesso!");
 			} catch (RegraNegocioException e) {
 				e.printStackTrace();
-				Messages.addGlobalError("Não foi possivel atualizar temporada!");
+				Messages.addGlobalError("Não foi possivel atualizar temporada ou episodio!");
 			}
 		}
 	}

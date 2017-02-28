@@ -49,8 +49,10 @@ public class EpisodioBean implements Serializable {
 	}
 
 	public void prepararCadastro() {
-		if (isNuloTemporada())
+		if (isNuloTemporada()) {
 			this.episodio.setTemporada(this.temporada);
+			this.carregarListas();
+		}	
 	}
 	
 	public void carregarListas() {

@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
+import br.com.mp.tv.serie.model.Episodio;
 import br.com.mp.tv.serie.model.Serie;
 import br.com.mp.tv.serie.model.Temporada;
 import br.com.mp.tv.serie.repository.Temporadas;
@@ -18,6 +19,8 @@ public class TemporadasDAO implements Temporadas, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private EntityManager manager;
+	@Inject
+	private EpisodiosDAO episodioDAO;
 	
 	@Inject
 	public TemporadasDAO(EntityManager manager) {
@@ -50,6 +53,22 @@ public class TemporadasDAO implements Temporadas, Serializable {
 	@Transactional
 	public Temporada salvar(Temporada temporada) throws RegraNegocioException {
 		return this.manager.merge(temporada);
+	}
+	
+	@Override
+	@Transactional
+	public void salvarTemporadaEpisodios(Temporada temporada) throws RegraNegocioException {
+		Temporada temporadaRetorno = this.manager.merge(temporada);
+		if(temporadaRetorno.getEpisodios().size() > 0) {
+			for(Episodio episodio : temporadaRetorno.getEpisodios()) {
+				try {
+					episodio.setTem(true);
+					episodioDAO.salvar(episodio);
+				} catch (RegraNegocioException e) {
+					e.printStackTrace();					
+				}
+			}
+		}
 	}
 
 	@Override

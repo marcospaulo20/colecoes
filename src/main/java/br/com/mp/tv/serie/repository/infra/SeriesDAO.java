@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
+import br.com.mp.tv.model.Genero;
 import br.com.mp.tv.model.TipoCategoria;
 import br.com.mp.tv.serie.model.Serie;
 import br.com.mp.tv.serie.repository.Series;
@@ -35,8 +36,21 @@ public class SeriesDAO implements Series, Serializable {
 	@Override
 	public List<Serie> todosPorCategoria(TipoCategoria tipoCategoria) {
 		TypedQuery<Serie> query = this.manager
-				.createQuery("SELECT s FROM Serie s "
+				.createQuery("SELECT DISTINCT s FROM Serie s "
+						+ "LEFT JOIN FETCH s.seriesGeneros "
 						+ "WHERE s.tipoCategoria = :tipoCategoria ORDER BY s.nomeOriginal", Serie.class);
+		query.setParameter("tipoCategoria", tipoCategoria);
+		return query.getResultList();
+	}
+	
+	@Override
+	public List<Serie> todosPorGeneroECategoria(Genero genero, TipoCategoria tipoCategoria) {
+		TypedQuery<Serie> query = this.manager
+				.createQuery("SELECT DISTINCT s FROM Serie s "
+						+ "LEFT JOIN FETCH s.seriesGeneros genero "
+						+ "WHERE genero = :genero AND s.tipoCategoria = :tipoCategoria "
+						+ "ORDER BY s.nomeOriginal", Serie.class);
+		query.setParameter("genero", genero.toString());
 		query.setParameter("tipoCategoria", tipoCategoria);
 		return query.getResultList();
 	}

@@ -14,6 +14,7 @@ public interface Temporadas {
 	Temporada porId(Long id);
 	
 	Temporada salvar(Temporada temporada) throws RegraNegocioException;
+	public void salvarTemporadaEpisodios(Temporada temporada) throws RegraNegocioException;
 	void remover(Temporada temporada) throws RegraNegocioException;
 	
 }

@@ -112,7 +112,7 @@ public class VolumeBean implements Serializable {
 		if(volume != null) {
 			volume.setTem(selecionado);
 			try {
-				this.volumes.salvar(volume);
+				this.volumes.salvarVolumeCapitulos(volume);
 				
 				Messages.addFlashGlobalInfo("O volume foi atualizado com sucesso!");
 			} catch (RegraNegocioException e) {

@@ -14,5 +14,6 @@ public interface Volumes {
 	Volume porId(Long id);
 	
 	Volume salvar(Volume volume) throws RegraNegocioException;
+	void salvarVolumeCapitulos(Volume volume) throws RegraNegocioException;
 	void remover(Volume volume) throws RegraNegocioException;
 }

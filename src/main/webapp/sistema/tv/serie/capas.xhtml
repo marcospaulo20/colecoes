@@ -24,13 +24,13 @@
 			        rows="12" paginator="true"
 			        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 			        rowsPerPageTemplate="6,12,16"
-			        emptyMessage="Nenhum serie foi encontrado.">
+			        emptyMessage="Nenhuma serie foi encontrada.">
 			        
 			        <p:panel header="#{serie.nomeOriginal}" style="text-align:center">
 			            <h:panelGrid columns="1" style="width:100%">
 			                <p:commandLink update="formImagensSeries" oncomplete="PF('dlgImagensSeries').show()">
 			                	<o:graphicImage value="#{imagensSerieGraphicBean.get(serie.id)}" 
-									lastModified="#{imagensSerieBean.ultimaModificaoFoto(serie)}" height="180" />
+									lastModified="#{imagensSerieBean.ultimaModificaoFoto(serie)}" height="200" />
 								<f:setPropertyActionListener value="#{serie}" target="#{imagensSerieBean.serieSelecionado}" />
 							</p:commandLink>
 							

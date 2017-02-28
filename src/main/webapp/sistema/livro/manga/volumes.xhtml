@@ -82,7 +82,7 @@
 					
 					<p:column headerText="Tem" styleClass="check">
 						<p:selectBooleanCheckbox value="#{volume.tem}">
-							<p:ajax partialSubmit="true" resetValues="true" listener="#{volumeBean.atualizarVolume(volume, volume.tem)}" update="formVolume:panelVolume" />
+							<p:ajax partialSubmit="true" resetValues="true" listener="#{volumeBean.atualizarVolume(volume, volume.tem)}" update="formVolume:panelVolume :formCapitulo:panelCapitulo" />
 						</p:selectBooleanCheckbox>						
 					</p:column>									
 					

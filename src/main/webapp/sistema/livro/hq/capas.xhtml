@@ -28,7 +28,7 @@
 					<p:ajax event="rowSelect" listener="#{imagensEdicoesBean.onRowSelect}" update="formEdicao" />
 					
 					<f:facet name="header">
-				        Lista de Titulos
+				        Lista de titulos
 				    </f:facet>
 					<p:column headerText="Nome" filterBy="#{hq.nome}" filterMatchMode="contains">
 						<h:outputLabel value="#{hq.nome}" />
@@ -54,7 +54,7 @@
 		            <h:panelGrid columns="1" style="width:100%">
 		                <p:commandLink update="formImagensEdicoes" oncomplete="PF('dlgImagensEdicoes').show()">
 		                	<o:graphicImage value="#{imagensEdicoesGraphicBean.get(edicao.id)}" 
-								lastModified="#{imagensEdicoesBean.ultimaModificaoFoto(edicao)}" height="150" />
+								lastModified="#{imagensEdicoesBean.ultimaModificaoFoto(edicao)}" height="200" />
 							<f:setPropertyActionListener value="#{edicao}" target="#{imagensEdicoesBean.edicaoSelecionado}" />
 						</p:commandLink>
 						
