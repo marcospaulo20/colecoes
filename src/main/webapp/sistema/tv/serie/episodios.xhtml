@@ -77,16 +77,16 @@
 				<p:inputText id="nome_e" value="#{episodioBean.episodio.nome}" size="20"
 					required="true" requiredMessage="O campo 'Nome' é obrigatorio." />
 				
-				<p:outputLabel for="dataExibicao" value="Data de exibição:" />
-				<p:calendar id="dataExibicao" size="12" pattern="dd/MM/yyyy" 
-					value="#{episodioBean.episodio.dataExibicao}" />
-				
 				<p:outputLabel for="diretor" value="Diretor:" />
 		        <p:selectOneMenu id="diretor" value="#{episodioBean.episodio.diretor}"
 		        	filter="true" filterMatchMode="contains" autoWidth="false" style="width: 120px">
 		            <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
 		            <f:selectItems value="#{episodioBean.todosDiretores}" var="diretor" itemValue="#{diretor}" itemLabel="#{diretor.nome}" />
 		        </p:selectOneMenu>
+		        
+		        <p:outputLabel for="dataExibicao" value="Data de exibição:" />
+				<p:calendar id="dataExibicao" size="12" pattern="dd/MM/yyyy" 
+					value="#{episodioBean.episodio.dataExibicao}" />
 				
 				<p:outputLabel for="assistir" value="Assistir:" />
 				<p:selectBooleanCheckbox id="assistir" value="#{episodioBean.episodio.assistir}" />

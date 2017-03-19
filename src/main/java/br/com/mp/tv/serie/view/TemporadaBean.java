@@ -12,6 +12,7 @@ import javax.inject.Named;
 import org.omnifaces.util.Messages;
 import org.primefaces.event.SelectEvent;
 
+import br.com.mp.tv.model.TipoIdioma;
 import br.com.mp.tv.serie.model.Serie;
 import br.com.mp.tv.serie.model.Temporada;
 import br.com.mp.tv.serie.repository.Temporadas;
@@ -129,6 +130,10 @@ public class TemporadaBean implements Serializable {
 	
 	public List<Temporada> getTodasTemporadas() {
 		return todasTemporadas;
+	}
+	
+	public TipoIdioma[] getTodosTiposIdiomas() {
+		return TipoIdioma.values(); 
 	}
 
 	public String quantidadeTotalTemporadas() {

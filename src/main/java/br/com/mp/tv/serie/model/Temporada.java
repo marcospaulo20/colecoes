@@ -7,6 +7,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +17,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import br.com.mp.tv.model.TipoIdioma;
 
 @Entity
 @Table(name = "tb_temporada", schema = "tv")
@@ -30,6 +34,10 @@ public class Temporada implements Serializable {
 
 	@Column(name = "ano_lancamento", nullable = false)
 	private int anoLancamento;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "tipo_idioma")
+	private TipoIdioma tipoIdioma;
 	
 	private boolean tem;
 
@@ -64,6 +72,14 @@ public class Temporada implements Serializable {
 
 	public void setAnoLancamento(int anoLancamento) {
 		this.anoLancamento = anoLancamento;
+	}
+	
+	public TipoIdioma getTipoIdioma() {
+		return tipoIdioma;
+	}
+	
+	public void setTipoIdioma(TipoIdioma tipoIdioma) {
+		this.tipoIdioma = tipoIdioma;
 	}
 	
 	public boolean isTem() {

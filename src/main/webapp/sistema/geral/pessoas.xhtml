@@ -20,7 +20,7 @@
 					
 					<p:selectOneButton value="#{pessoaBean.tipoSelecionado}">
 			            <f:selectItems value="#{pessoaBean.tiposPessoas}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
-			            <p:ajax event="change" listener="#{pessoaBean.mundarTipoManga}" update=":formPessoa:tabelaPessoa" />
+			            <p:ajax event="change" listener="#{pessoaBean.mundarTipoManga}" update="tabelaPessoa" />
 			        </p:selectOneButton>
 				</f:facet>
 				
@@ -69,9 +69,14 @@
 			            <f:selectItem itemLabel="Selecione um País" itemValue="" />
 			            <f:selectItem itemLabel="Australia" itemValue="Australia" />
 			            <f:selectItem itemLabel="Brasil" itemValue="Brasil" />
-			            <f:selectItem itemLabel="Estados Unidos" itemValue="Estados Unidos" />
+			            <f:selectItem itemLabel="Canadá" itemValue="Canadá" />
+			            <f:selectItem itemLabel="China" itemValue="China" />
+			            <f:selectItem itemLabel="Escócia" itemValue="Escócia" />
+			            <f:selectItem itemLabel="Estados Unidos" itemValue="Estados Unidos" />			            
 			            <f:selectItem itemLabel="Italia" itemValue="Italia" />
+			            <f:selectItem itemLabel="Irlanda" itemValue="Irlanda" />
 			            <f:selectItem itemLabel="Japão" itemValue="Japão" />
+			            <f:selectItem itemLabel="Marrocos" itemValue="Marrocos" />
 			            <f:selectItem itemLabel="Noruega" itemValue="Noruega" />
 			            <f:selectItem itemLabel="Reino Unido" itemValue="Reino Unido" />
 			            <f:selectItem itemLabel="Rússia" itemValue="Rússia" />

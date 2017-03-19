@@ -4,7 +4,8 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
 	<ui:define name="titulo">HQs</ui:define>
 
@@ -60,6 +61,9 @@
 							<f:setPropertyActionListener value="#{hq}" target="#{hqBean.hqSelecionada}" />
 						</p:commandButton>
 					</p:column>
+					<f:facet name="footer">
+				        No total h&#225; #{fn:length(hqBean.todosHQs)} HQs.
+				    </f:facet>
 				</p:dataTable>
 			</p:panel>
 		</h:form>

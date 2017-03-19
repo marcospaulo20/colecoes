@@ -65,6 +65,10 @@
 							<h:outputText value="#{temporada.anoLancamento}" />
 						</p:column>
 						
+						<p:column headerText="Tipo idioma">
+							<h:outputText value="#{temporada.tipoIdioma.descricao}" />
+						</p:column>
+						
 						<p:column headerText="Tem" styleClass="check">
 							<p:selectBooleanCheckbox value="#{temporada.tem}">
 								<p:ajax partialSubmit="true" resetValues="true" listener="#{temporadaBean.atualizarTemporada(temporada, temporada.tem)}" update="formTemporada:panelTemporada" />
@@ -106,6 +110,12 @@
 					<p:outputLabel for="ano" value="Ano lançamento:" />
 					<p:inputText id="ano" value="#{temporadaBean.temporada.anoLancamento}" size="5"
 						required="true" requiredMessage="O campo 'Ano lançamento' é obrigatorio." />
+					
+					<p:outputLabel for="tipoIdioma" value="Tipo idioma:" />
+			        <p:selectOneMenu id="tipoIdioma" value="#{temporadaBean.temporada.tipoIdioma}" 
+			        	required="true" requiredMessage="O campo 'Tipo Idioma' é obrigatorio.">
+			            <f:selectItems value="#{temporadaBean.todosTiposIdiomas}" var="tipoIdioma" itemValue="#{tipoIdioma}" itemLabel="#{tipoIdioma.descricao}" />
+			        </p:selectOneMenu>
 					
 			        <p:outputLabel for="tem" value="Tem:" />
 					<p:selectBooleanCheckbox id="tem" value="#{temporadaBean.temporada.tem}" />

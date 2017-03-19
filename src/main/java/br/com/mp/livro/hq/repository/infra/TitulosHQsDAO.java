@@ -28,7 +28,8 @@ public class TitulosHQsDAO implements TitulosHQs, Serializable {
 	public List<TituloHQ> raizes() {
 		return manager
 				.createQuery("SELECT t FROM TituloHQ t "
-						+ "WHERE t.tituloHQPai IS NULL", TituloHQ.class)
+						+ "WHERE t.tituloHQPai IS NULL "
+						+ "ORDER BY t.nome", TituloHQ.class)
 				.getResultList();
 	}
 	
@@ -39,7 +40,8 @@ public class TitulosHQsDAO implements TitulosHQs, Serializable {
 					.createQuery("SELECT t "
 							+ "FROM TituloHQ t "
 							+ "LEFT JOIN FETCH t.hqs "
-							+ "WHERE t = :tituloHQ", TituloHQ.class);		
+							+ "WHERE t = :tituloHQ "
+							+ "ORDER BY t.nome", TituloHQ.class);		
 			query.setParameter("tituloHQ", tituloHQ);
 			TituloHQ tituloHQRetorno = query.getSingleResult();
 			

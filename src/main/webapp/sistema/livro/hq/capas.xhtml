@@ -54,7 +54,7 @@
 		            <h:panelGrid columns="1" style="width:100%">
 		                <p:commandLink update="formImagensEdicoes" oncomplete="PF('dlgImagensEdicoes').show()">
 		                	<o:graphicImage value="#{imagensEdicoesGraphicBean.get(edicao.id)}" 
-								lastModified="#{imagensEdicoesBean.ultimaModificaoFoto(edicao)}" height="200" />
+								lastModified="#{imagensEdicoesBean.ultimaModificaoFoto(edicao)}" height="180" width="auto" />
 							<f:setPropertyActionListener value="#{edicao}" target="#{imagensEdicoesBean.edicaoSelecionado}" />
 						</p:commandLink>
 						

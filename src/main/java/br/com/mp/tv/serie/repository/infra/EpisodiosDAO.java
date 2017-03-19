@@ -34,7 +34,8 @@ public class EpisodiosDAO implements Episodios, Serializable {
 	@Override
 	public List<Episodio> todosPorTemporada(Temporada temporada) {
 		TypedQuery<Episodio> query = this.manager
-				.createQuery("SELECT e FROM Episodio e "						
+				.createQuery("SELECT e FROM Episodio e "
+						+ "LEFT JOIN FETCH e.diretor "
 						+ "WHERE e.temporada = :temporada "
 						+ "ORDER BY e.numero", Episodio.class);
 		query.setParameter("temporada", temporada);
@@ -46,6 +47,7 @@ public class EpisodiosDAO implements Episodios, Serializable {
 		TypedQuery<Episodio> query = this.manager
 				.createQuery("SELECT e FROM Episodio e "							
 						+ "JOIN FETCH e.temporada "
+						+ "LEFT JOIN FETCH e.diretor "
 						+ "WHERE e.temporada.serie = :serie "
 						+ "ORDER BY e.numero", Episodio.class);
 		query.setParameter("serie", serie);

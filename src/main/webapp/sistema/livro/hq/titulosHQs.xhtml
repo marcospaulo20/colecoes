@@ -39,9 +39,12 @@
 					<p:column headerText="Ano" sortBy="#{hq.anoLancamento}" styleClass="data">
 						<h:outputLabel value="#{hq.anoLancamento}" />
 					</p:column>
+					<p:column headerText="Status" sortBy="#{hq.status}">
+						<h:outputLabel value="#{hq.status.descricao}" />
+					</p:column>
 				</p:dataTable>
 				
-			</p:panel>			
+			</p:panel>
 			<p:contextMenu for="tituloHQ">
 		        <p:menuitem value="Adicionar" icon="ui-icon-plus" actionListener="#{tituloHQBean.adicionarFilho}" oncomplete="PF('dlgTituloHQ').show()" update="dlgTituloHQ" />
 		        <p:menuitem value="Editar" icon="ui-icon-pencil" actionListener="#{tituloHQBean.editar}" update="dlgTituloHQ" oncomplete="PF('dlgTituloHQ').show()"/>
