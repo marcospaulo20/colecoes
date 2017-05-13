@@ -86,7 +86,8 @@
 		        
 		        <p:outputLabel for="dataExibicao" value="Data de exibição:" />
 				<p:calendar id="dataExibicao" size="12" pattern="dd/MM/yyyy" 
-					value="#{episodioBean.episodio.dataExibicao}" />
+					value="#{episodioBean.episodio.dataExibicao}"
+					required="true" requiredMessage="O campo 'Data de exibição' é obrigatorio." />
 				
 				<p:outputLabel for="assistir" value="Assistir:" />
 				<p:selectBooleanCheckbox id="assistir" value="#{episodioBean.episodio.assistir}" />
